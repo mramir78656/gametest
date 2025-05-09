@@ -5,6 +5,7 @@ import { API, GRADES } from "@/lib/constants";
 import { Game, Grade } from "@/types";
 import ProgressTracker from "./ProgressTracker";
 import SimilarGames from "./SimilarGames";
+import GameLoader from "./GameLoader";
 import { useUser } from "@/contexts/UserContext";
 
 interface GameDetailProps {
@@ -21,7 +22,7 @@ const GameDetail = ({ game, grades = GRADES }: GameDetailProps) => {
   // Find the grade info
   const grade = grades?.find(g => g.id === game.gradeId) || 
     GRADES.find(g => g.id === game.gradeId) || 
-    { name: "All Grades", slug: "all", color: "#6c757d", bgClass: "bg-gray-500" };
+    { name: "All Grades", slug: "all", color: "#6c757d", id: 0, displayOrder: 0, icon: "graduation-cap" };
 
   // Start playing the game
   const startGame = () => {
@@ -65,14 +66,14 @@ const GameDetail = ({ game, grades = GRADES }: GameDetailProps) => {
             <div id="game-container" className="bg-dark rounded-xl p-4 shadow-xl">
               <div className="bg-black rounded-lg aspect-video flex items-center justify-center mb-4 relative overflow-hidden">
                 {isPlaying ? (
-                  // Game iframe or component would be here
-                  <div className="w-full h-full bg-black text-white flex items-center justify-center">
-                    <iframe 
-                      src={`/games/${game.slug}?muted=${isMuted ? 1 : 0}`}
-                      className="w-full h-full border-0"
-                      title={game.title}
-                      allowFullScreen
-                    ></iframe>
+                  // Load the game component directly
+                  <div className="w-full h-full bg-black flex items-center justify-center">
+                    {/* Game component will be imported and rendered here */}
+                    <GameLoader 
+                      gameSlug={game.slug} 
+                      isMuted={isMuted}
+                      onScoreUpdate={(score: number) => console.log('Score update:', score)}
+                    />
                   </div>
                 ) : (
                   <>
@@ -144,7 +145,7 @@ const GameDetail = ({ game, grades = GRADES }: GameDetailProps) => {
             <div className="mt-8">
               <h1 className="text-4xl font-game text-dark mb-2">{game.title}</h1>
               <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className={`inline-block ${grade.bgClass || 'bg-gray-500'} text-xs text-white font-bold px-2 py-1 rounded-full`}>
+                <span className={`inline-block bg-${grade.slug} text-xs text-white font-bold px-2 py-1 rounded-full`}>
                   {grade.name}
                 </span>
                 
