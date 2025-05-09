@@ -8,6 +8,13 @@ import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/HomePage";
 import GameDetailPage from "@/pages/GameDetailPage";
 import GradePage from "@/pages/GradePage";
+import AboutPage from "@/pages/AboutPage";
+import ParentsPage from "@/pages/ParentsPage";
+import TeachersPage from "@/pages/TeachersPage";
+import LoginPage from "@/pages/LoginPage";
+import SignupPage from "@/pages/SignupPage";
+import TermsPage from "@/pages/TermsPage";
+import PrivacyPage from "@/pages/PrivacyPage";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -17,6 +24,13 @@ function Router() {
       <Route path="/" component={HomePage} />
       <Route path="/game/:slug" component={GameDetailPage} />
       <Route path="/grade/:slug" component={GradePage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/parents" component={ParentsPage} />
+      <Route path="/teachers" component={TeachersPage} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/signup" component={SignupPage} />
+      <Route path="/terms" component={TermsPage} />
+      <Route path="/privacy" component={PrivacyPage} />
       <Route component={NotFound} />
     </Switch>
   );
