@@ -12,14 +12,14 @@ const GameCard = ({ game, grades = GRADES, showGrade = true }: GameCardProps) =>
   // Find grade info
   const grade = grades.find(g => g.id === game.gradeId) || 
     GRADES.find(g => g.id === game.gradeId) || 
-    { name: "All Grades", slug: "all", color: "#6c757d", bgClass: "bg-gray-500" };
+    { name: "All Grades", slug: "all", color: "#6c757d", id: 0, displayOrder: 0, icon: "graduation-cap" };
   
   // Get subject tags
   const subjects = game.subjects || [];
   
   return (
     <Link href={`/game/${game.slug}`}>
-      <a className="game-card flex-shrink-0 w-64 bg-white rounded-xl overflow-hidden shadow-lg transition duration-300">
+      <div className="game-card cursor-pointer flex-shrink-0 w-64 bg-white rounded-xl overflow-hidden shadow-lg transition duration-300">
         {/* Game thumbnail */}
         <div className="w-full h-36 bg-gray-200 overflow-hidden">
           {game.thumbnail ? (
@@ -43,7 +43,7 @@ const GameCard = ({ game, grades = GRADES, showGrade = true }: GameCardProps) =>
           <div className="flex justify-between items-start">
             <div>
               {showGrade && (
-                <span className={`inline-block ${grade.bgClass || 'bg-gray-500'} text-xs text-white font-bold px-2 py-1 rounded-full mb-2`}>
+                <span className={`inline-block bg-${grade.slug} text-xs text-white font-bold px-2 py-1 rounded-full mb-2`}>
                   {grade.name}
                 </span>
               )}
@@ -60,7 +60,7 @@ const GameCard = ({ game, grades = GRADES, showGrade = true }: GameCardProps) =>
               {subjects.map((subject) => (
                 <span 
                   key={subject.id}
-                  className={`inline-block bg-${subject.slug}-100 text-${subject.slug}-700 text-xs font-bold px-2 py-1 rounded-full`}
+                  className={`inline-block text-xs font-bold px-2 py-1 rounded-full`}
                   style={{ 
                     backgroundColor: `${subject.color || '#e9ecef'}20`,
                     color: subject.color || '#495057' 
@@ -72,11 +72,11 @@ const GameCard = ({ game, grades = GRADES, showGrade = true }: GameCardProps) =>
             </div>
           )}
           
-          <button className={`mt-4 w-full ${game.isPremium ? 'bg-gray-300 text-gray-700' : `${grade.bgClass || 'bg-primary'} hover:bg-opacity-80 text-white`} font-bold py-2 px-4 rounded-lg transition`}>
+          <button className={`mt-4 w-full ${game.isPremium ? 'bg-gray-300 text-gray-700' : `bg-${grade.slug} hover:bg-opacity-80 text-white`} font-bold py-2 px-4 rounded-lg transition`}>
             {game.isPremium ? 'Premium' : 'Play Now'}
           </button>
         </div>
-      </a>
+      </div>
     </Link>
   );
 };

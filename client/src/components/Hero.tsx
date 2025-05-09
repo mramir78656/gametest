@@ -10,14 +10,14 @@ const Hero = () => {
             <p className="text-lg md:text-xl font-heading mb-6">Over 40 interactive educational games for PreK through 6th grade.</p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
               <Link href="/grade/prek">
-                <a className="bg-accent hover:bg-opacity-80 text-dark font-heading font-bold py-3 px-6 rounded-full text-lg transition transform hover:scale-105 text-center">
+                <div className="bg-accent hover:bg-opacity-80 text-dark font-heading font-bold py-3 px-6 rounded-full text-lg transition transform hover:scale-105 text-center cursor-pointer">
                   Start Playing Now!
-                </a>
+                </div>
               </Link>
               <Link href="/teachers">
-                <a className="bg-white hover:bg-opacity-80 text-primary font-heading font-bold py-3 px-6 rounded-full text-lg transition transform hover:scale-105 text-center">
+                <div className="bg-white hover:bg-opacity-80 text-primary font-heading font-bold py-3 px-6 rounded-full text-lg transition transform hover:scale-105 text-center cursor-pointer">
                   For Teachers
-                </a>
+                </div>
               </Link>
             </div>
           </div>

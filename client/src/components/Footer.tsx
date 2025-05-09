@@ -40,32 +40,32 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link href="/">
-                  <a className="text-gray-400 hover:text-primary transition">Home</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Home</div>
                 </Link>
               </li>
               <li>
                 <Link href="/grade/prek">
-                  <a className="text-gray-400 hover:text-primary transition">Games by Grade</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Games by Grade</div>
                 </Link>
               </li>
               <li>
                 <Link href="/subjects">
-                  <a className="text-gray-400 hover:text-primary transition">Games by Subject</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Games by Subject</div>
                 </Link>
               </li>
               <li>
                 <Link href="/about">
-                  <a className="text-gray-400 hover:text-primary transition">About Us</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">About Us</div>
                 </Link>
               </li>
               <li>
                 <Link href="/blog">
-                  <a className="text-gray-400 hover:text-primary transition">Blog</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Blog</div>
                 </Link>
               </li>
               <li>
                 <Link href="/contact">
-                  <a className="text-gray-400 hover:text-primary transition">Contact</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Contact</div>
                 </Link>
               </li>
             </ul>
@@ -77,27 +77,27 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link href="/parents/getting-started">
-                  <a className="text-gray-400 hover:text-primary transition">Getting Started</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Getting Started</div>
                 </Link>
               </li>
               <li>
                 <Link href="/parents/premium">
-                  <a className="text-gray-400 hover:text-primary transition">Premium Subscription</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Premium Subscription</div>
                 </Link>
               </li>
               <li>
                 <Link href="/parents/progress">
-                  <a className="text-gray-400 hover:text-primary transition">Progress Tracking</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Progress Tracking</div>
                 </Link>
               </li>
               <li>
                 <Link href="/parents/safety">
-                  <a className="text-gray-400 hover:text-primary transition">Safety & Privacy</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Safety & Privacy</div>
                 </Link>
               </li>
               <li>
                 <Link href="/parents/faq">
-                  <a className="text-gray-400 hover:text-primary transition">FAQs</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">FAQs</div>
                 </Link>
               </li>
             </ul>
@@ -109,27 +109,27 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link href="/teachers/classroom-tools">
-                  <a className="text-gray-400 hover:text-primary transition">Classroom Tools</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Classroom Tools</div>
                 </Link>
               </li>
               <li>
                 <Link href="/teachers/lesson-plans">
-                  <a className="text-gray-400 hover:text-primary transition">Lesson Plans</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Lesson Plans</div>
                 </Link>
               </li>
               <li>
                 <Link href="/teachers/school-subscriptions">
-                  <a className="text-gray-400 hover:text-primary transition">School Subscriptions</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">School Subscriptions</div>
                 </Link>
               </li>
               <li>
                 <Link href="/teachers/remote-learning">
-                  <a className="text-gray-400 hover:text-primary transition">Remote Learning</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Remote Learning</div>
                 </Link>
               </li>
               <li>
                 <Link href="/teachers/resources">
-                  <a className="text-gray-400 hover:text-primary transition">Teacher Resources</a>
+                  <div className="text-gray-400 hover:text-primary transition cursor-pointer">Teacher Resources</div>
                 </Link>
               </li>
             </ul>
@@ -140,13 +140,13 @@ const Footer = () => {
           <p className="text-gray-500 text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} EduFun Games. All rights reserved.</p>
           <div className="flex space-x-4 text-sm">
             <Link href="/terms">
-              <a className="text-gray-500 hover:text-primary transition">Terms of Service</a>
+              <div className="text-gray-500 hover:text-primary transition cursor-pointer">Terms of Service</div>
             </Link>
             <Link href="/privacy">
-              <a className="text-gray-500 hover:text-primary transition">Privacy Policy</a>
+              <div className="text-gray-500 hover:text-primary transition cursor-pointer">Privacy Policy</div>
             </Link>
             <Link href="/cookies">
-              <a className="text-gray-500 hover:text-primary transition">Cookie Policy</a>
+              <div className="text-gray-500 hover:text-primary transition cursor-pointer">Cookie Policy</div>
             </Link>
           </div>
         </div>
