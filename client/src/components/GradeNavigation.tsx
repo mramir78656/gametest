@@ -32,7 +32,7 @@ const GradeNavigation = () => {
         <div className="flex overflow-x-auto space-x-2 py-2 no-scrollbar">
           {gradeData.map((grade) => {
             const isActive = activeGrade === grade.slug;
-            const bgClass = grade.bgClass || `bg-${grade.slug}`;
+            const bgClass = `bg-${grade.slug}`;
             return (
               <div key={grade.id} className="flex-shrink-0">
                 <Link href={`/grade/${grade.slug}`}>

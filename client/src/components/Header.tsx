@@ -84,19 +84,19 @@ const Header = () => {
           <div className="md:hidden py-4 border-t border-gray-100">
             <nav className="flex flex-col space-y-4">
               <Link href="/">
-                <a className="font-heading font-bold text-dark hover:text-primary transition">Home</a>
+                <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Home</div>
               </Link>
               <Link href="/grade/prek">
-                <a className="font-heading font-bold text-dark hover:text-primary transition">Games</a>
+                <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Games</div>
               </Link>
               <Link href="/about">
-                <a className="font-heading font-bold text-dark hover:text-primary transition">About</a>
+                <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">About</div>
               </Link>
               <Link href="/parents">
-                <a className="font-heading font-bold text-dark hover:text-primary transition">Parents</a>
+                <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Parents</div>
               </Link>
               <Link href="/teachers">
-                <a className="font-heading font-bold text-dark hover:text-primary transition">Teachers</a>
+                <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Teachers</div>
               </Link>
               {!user && (
                 <button 

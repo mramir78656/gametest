@@ -26,9 +26,9 @@ const CallToAction = () => {
             Sign Up Free
           </button>
           <Link href="/teachers">
-            <a className="bg-white hover:bg-opacity-80 text-primary font-heading font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105">
+            <div className="bg-white hover:bg-opacity-80 text-primary font-heading font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 cursor-pointer">
               For Teachers
-            </a>
+            </div>
           </Link>
         </div>
       </div>
