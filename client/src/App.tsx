@@ -18,6 +18,25 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+// Parent pages
+import ParentsGettingStartedPage from "@/pages/ParentsGettingStartedPage";
+import ParentsPremiumPage from "@/pages/ParentsPremiumPage";
+import ParentsProgressPage from "@/pages/ParentsProgressPage";
+import ParentsSafetyPage from "@/pages/ParentsSafetyPage";
+import ParentsFAQPage from "@/pages/ParentsFAQPage";
+
+// Teacher pages
+import TeachersClassroomToolsPage from "@/pages/TeachersClassroomToolsPage";
+import TeachersLessonPlansPage from "@/pages/TeachersLessonPlansPage";
+import TeachersSubscriptionsPage from "@/pages/TeachersSubscriptionsPage";
+import TeachersRemoteLearningPage from "@/pages/TeachersRemoteLearningPage";
+import TeachersResourcesPage from "@/pages/TeachersResourcesPage";
+
+// Misc pages
+import CookiesPage from "@/pages/CookiesPage";
+import BlogPage from "@/pages/BlogPage";
+import ContactPage from "@/pages/ContactPage";
+
 function Router() {
   return (
     <Switch>
