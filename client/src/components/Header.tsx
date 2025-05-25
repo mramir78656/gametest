@@ -9,16 +9,16 @@ const Header = () => {
   const { user, login, logout } = useUser();
   const [location] = useLocation();
 
-  // Grade categories with icons and colors
+  // Grade categories with icons
   const grades = [
-    { name: "Pre-Nursery", slug: "pre-nursery", icon: "🧸", color: "bg-blue-500" },
-    { name: "Nursery", slug: "nursery", icon: "🌱", color: "bg-green-500" },
-    { name: "KG", slug: "kg", icon: "🎨", color: "bg-purple-500" },
-    { name: "Grade 1", slug: "grade-1", icon: "1️⃣", color: "bg-red-500" },
-    { name: "Grade 2", slug: "grade-2", icon: "2️⃣", color: "bg-yellow-500" },
-    { name: "Grade 3", slug: "grade-3", icon: "3️⃣", color: "bg-pink-500" },
-    { name: "Grade 4", slug: "grade-4", icon: "4️⃣", color: "bg-indigo-500" },
-    { name: "Grade 5", slug: "grade-5", icon: "5️⃣", color: "bg-teal-500" }
+    { name: "PreK", slug: "prek", icon: "★" },
+    { name: "Kindergarten", slug: "kindergarten", icon: "🍎" },
+    { name: "1st Grade", slug: "grade-1", icon: "✏️" },
+    { name: "2nd Grade", slug: "grade-2", icon: "📚" },
+    { name: "3rd Grade", slug: "grade-3", icon: "📋" },
+    { name: "4th Grade", slug: "grade-4", icon: "🌎" },
+    { name: "5th Grade", slug: "grade-5", icon: "⚙️" },
+    { name: "6th Grade", slug: "grade-6", icon: "🔍" }
   ];
 
   // Close mobile menu when navigating
@@ -224,32 +224,26 @@ const Header = () => {
         )}
       </div>
       
-      {/* Grade Navigation Bar */}
-      <div className="bg-gradient-to-r from-primary to-primary-dark shadow-md">
-        <div className="container mx-auto px-4">
-          <div className="hidden md:flex justify-between items-center overflow-x-auto py-1">
+      {/* Main Grade Navigation Bar (shown on all screens) */}
+      <div className="border-t border-gray-200">
+        <div className="container mx-auto">
+          <div className="flex justify-between items-center overflow-x-auto py-2 px-4">
             {grades.map((grade) => (
               <Link key={grade.slug} href={`/grade/${grade.slug}`}>
-                <div className={`py-3 px-4 text-white font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-200 cursor-pointer whitespace-nowrap rounded-md ${activeGrade === grade.slug ? 'bg-white bg-opacity-20 shadow-sm' : ''} flex items-center`}>
-                  <span className="mr-2">{grade.icon}</span>
-                  {grade.name}
+                <div className="flex flex-col items-center px-3 py-1 transition-all duration-200 cursor-pointer group">
+                  <div className={`text-xl mb-1 ${activeGrade === grade.slug ? 'text-primary' : 'text-gray-600 group-hover:text-primary'}`}>
+                    {grade.icon}
+                  </div>
+                  <div className={`text-sm whitespace-nowrap ${activeGrade === grade.slug ? 'font-medium text-primary' : 'text-gray-600 group-hover:text-primary'}`}>
+                    {grade.name}
+                  </div>
+                  {activeGrade === grade.slug && (
+                    <div className="h-0.5 w-full bg-primary mt-1 rounded-full"></div>
+                  )}
                 </div>
               </Link>
             ))}
           </div>
-        </div>
-      </div>
-      
-      {/* Mobile Grade Navigation */}
-      <div className="md:hidden overflow-x-auto scrollbar-hide bg-gray-50 border-b border-gray-200">
-        <div className="flex py-2 px-4 space-x-2">
-          {grades.map((grade) => (
-            <Link key={grade.slug} href={`/grade/${grade.slug}`}>
-              <div className={`whitespace-nowrap px-3 py-2 rounded-full transition ${activeGrade === grade.slug ? 'bg-primary text-white shadow-md' : 'bg-white text-dark border border-gray-200'} text-sm font-medium`}>
-                {grade.icon} {grade.name}
-              </div>
-            </Link>
-          ))}
         </div>
       </div>
     </header>
