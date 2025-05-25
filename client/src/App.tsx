@@ -31,6 +31,26 @@ function Router() {
       <Route path="/signup" component={SignupPage} />
       <Route path="/terms" component={TermsPage} />
       <Route path="/privacy" component={PrivacyPage} />
+      
+      {/* Parent pages */}
+      <Route path="/parents/getting-started" component={ParentsGettingStartedPage} />
+      <Route path="/parents/premium" component={ParentsPremiumPage} />
+      <Route path="/parents/progress" component={ParentsProgressPage} />
+      <Route path="/parents/safety" component={ParentsSafetyPage} />
+      <Route path="/parents/faq" component={ParentsFAQPage} />
+      
+      {/* Teacher pages */}
+      <Route path="/teachers/classroom-tools" component={TeachersClassroomToolsPage} />
+      <Route path="/teachers/lesson-plans" component={TeachersLessonPlansPage} />
+      <Route path="/teachers/school-subscriptions" component={TeachersSubscriptionsPage} />
+      <Route path="/teachers/remote-learning" component={TeachersRemoteLearningPage} />
+      <Route path="/teachers/resources" component={TeachersResourcesPage} />
+      
+      {/* Misc pages */}
+      <Route path="/cookies" component={CookiesPage} />
+      <Route path="/blog" component={BlogPage} />
+      <Route path="/contact" component={ContactPage} />
+      
       <Route component={NotFound} />
     </Switch>
   );
