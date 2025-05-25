@@ -4,7 +4,20 @@ import { useUser } from "@/contexts/UserContext";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isGradeMenuOpen, setIsGradeMenuOpen] = useState(false);
   const { user, login, logout } = useUser();
+
+  // Grade categories
+  const grades = [
+    { name: "Pre-Nursery", slug: "pre-nursery" },
+    { name: "Nursery", slug: "nursery" },
+    { name: "KG", slug: "kg" },
+    { name: "Grade 1", slug: "grade-1" },
+    { name: "Grade 2", slug: "grade-2" },
+    { name: "Grade 3", slug: "grade-3" },
+    { name: "Grade 4", slug: "grade-4" },
+    { name: "Grade 5", slug: "grade-5" }
+  ];
 
   return (
     <header className="bg-white shadow-md">
@@ -28,9 +41,33 @@ const Header = () => {
             <Link href="/">
               <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Home</div>
             </Link>
-            <Link href="/grade/prek">
-              <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Games</div>
-            </Link>
+            
+            {/* Grade Dropdown */}
+            <div className="relative group">
+              <div 
+                className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer flex items-center"
+                onClick={() => setIsGradeMenuOpen(!isGradeMenuOpen)}
+              >
+                Games by Grade
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              
+              {/* Grade Dropdown Menu - Desktop */}
+              <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-20 transform origin-top scale-0 group-hover:scale-100 transition duration-150 ease-in-out">
+                <div className="py-2 grid grid-cols-1 gap-1">
+                  {grades.map((grade) => (
+                    <Link key={grade.slug} href={`/grade/${grade.slug}`}>
+                      <div className="px-4 py-2 text-dark hover:bg-primary hover:text-white transition cursor-pointer">
+                        {grade.name}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
             <Link href="/about">
               <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">About</div>
             </Link>
@@ -86,9 +123,38 @@ const Header = () => {
               <Link href="/">
                 <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Home</div>
               </Link>
-              <Link href="/grade/prek">
-                <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">Games</div>
-              </Link>
+              
+              {/* Grade dropdown - Mobile */}
+              <div>
+                <div 
+                  className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer flex items-center justify-between"
+                  onClick={() => setIsGradeMenuOpen(!isGradeMenuOpen)}
+                >
+                  <span>Games by Grade</span>
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className={`h-4 w-4 transition-transform duration-200 ${isGradeMenuOpen ? 'transform rotate-180' : ''}`} 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                
+                {isGradeMenuOpen && (
+                  <div className="pl-4 mt-2 space-y-2 border-l-2 border-gray-100">
+                    {grades.map((grade) => (
+                      <Link key={grade.slug} href={`/grade/${grade.slug}`}>
+                        <div className="font-heading text-dark hover:text-primary transition cursor-pointer">
+                          {grade.name}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
               <Link href="/about">
                 <div className="font-heading font-bold text-dark hover:text-primary transition cursor-pointer">About</div>
               </Link>
@@ -109,6 +175,21 @@ const Header = () => {
             </nav>
           </div>
         )}
+      </div>
+      
+      {/* Grade Navigation Bar */}
+      <div className="bg-primary">
+        <div className="container mx-auto px-4">
+          <div className="hidden md:flex justify-between items-center overflow-x-auto">
+            {grades.map((grade) => (
+              <Link key={grade.slug} href={`/grade/${grade.slug}`}>
+                <div className="py-3 px-4 text-white font-medium hover:bg-primary-dark transition cursor-pointer whitespace-nowrap">
+                  {grade.name}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </header>
   );

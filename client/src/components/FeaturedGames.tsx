@@ -69,9 +69,9 @@ const FeaturedGames = () => {
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-game text-dark">Featured <span className="text-primary">Games</span></h2>
           <Link href="/games">
-            <a className="text-secondary font-heading font-bold hover:underline flex items-center">
+            <div className="text-secondary font-heading font-bold hover:underline flex items-center cursor-pointer">
               View All Games <i className="fas fa-arrow-right ml-2"></i>
-            </a>
+            </div>
           </Link>
         </div>
         
