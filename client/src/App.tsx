@@ -35,6 +35,7 @@ import TeachersResourcesPage from "@/pages/TeachersResourcesPage";
 // Misc pages
 import CookiesPage from "@/pages/CookiesPage";
 import BlogPage from "@/pages/BlogPage";
+import BlogPostPage from "@/pages/BlogPostPage";
 import ContactPage from "@/pages/ContactPage";
 import GamesBySubjectPage from "@/pages/GamesBySubjectPage";
 
@@ -69,6 +70,7 @@ function Router() {
       {/* Misc pages */}
       <Route path="/cookies" component={CookiesPage} />
       <Route path="/blog" component={BlogPage} />
+      <Route path="/blog/:id" component={BlogPostPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/games-by-subject" component={GamesBySubjectPage} />
       
