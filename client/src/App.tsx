@@ -36,6 +36,7 @@ import TeachersResourcesPage from "@/pages/TeachersResourcesPage";
 import CookiesPage from "@/pages/CookiesPage";
 import BlogPage from "@/pages/BlogPage";
 import ContactPage from "@/pages/ContactPage";
+import GamesBySubjectPage from "@/pages/GamesBySubjectPage";
 
 function Router() {
   return (
@@ -69,6 +70,7 @@ function Router() {
       <Route path="/cookies" component={CookiesPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/contact" component={ContactPage} />
+      <Route path="/games-by-subject" component={GamesBySubjectPage} />
       
       <Route component={NotFound} />
     </Switch>

@@ -49,7 +49,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/subjects">
+                <Link href="/games-by-subject">
                   <div className="text-gray-400 hover:text-primary transition cursor-pointer">Games by Subject</div>
                 </Link>
               </li>
