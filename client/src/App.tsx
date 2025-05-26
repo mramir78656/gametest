@@ -38,6 +38,7 @@ import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 import ContactPage from "@/pages/ContactPage";
 import GamesBySubjectPage from "@/pages/GamesBySubjectPage";
+import ClassroomToolsPage from "@/pages/ClassroomToolsPage";
 
 function Router() {
   return (
@@ -73,6 +74,7 @@ function Router() {
       <Route path="/blog/:id" component={BlogPostPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/games-by-subject" component={GamesBySubjectPage} />
+      <Route path="/classroom-tools" component={ClassroomToolsPage} />
       
       <Route component={NotFound} />
     </Switch>
