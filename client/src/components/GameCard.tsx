@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Game, Grade, Subject } from "@/types";
 import { GRADES, SUBJECTS } from "@/lib/constants";
+import GameThumbnail from "@/components/GameThumbnail";
 
 interface GameCardProps {
   game: Game;
@@ -22,21 +23,11 @@ const GameCard = ({ game, grades = GRADES, showGrade = true }: GameCardProps) =>
       <div className="game-card cursor-pointer flex-shrink-0 w-64 bg-white rounded-xl overflow-hidden shadow-lg transition duration-300">
         {/* Game thumbnail */}
         <div className="w-full h-36 bg-gray-200 overflow-hidden">
-          {game.thumbnail ? (
-            <img 
-              src={`/api/games/thumbnails/${game.thumbnail}`} 
-              alt={`${game.title} Game`} 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = `https://via.placeholder.com/300x180/4ECDC4/FFFFFF?text=${encodeURIComponent(game.title)}`;
-              }}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-secondary bg-opacity-30">
-              <i className={`fas fa-gamepad text-4xl text-secondary`}></i>
-            </div>
-          )}
+          <GameThumbnail 
+            gameSlug={game.slug} 
+            title={game.title}
+            className="w-full h-full object-cover"
+          />
         </div>
         
         <div className="p-4">
