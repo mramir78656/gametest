@@ -97,9 +97,22 @@ const SubtractionSafari = () => {
         {/* Game Area */}
         {gameStarted && (
           <div className="bg-white rounded-xl p-8 shadow-lg text-center">
+            {/* Animated safari scene */}
+            <div className="mb-6">
+              <svg width="400" height="200" className="mx-auto mb-4" viewBox="0 0 400 200">
+                <rect width="400" height="200" fill="#90EE90" rx="15"/>
+                <circle cx="350" cy="50" r="40" fill="#FFD700" className="animate-pulse"/>
+                <rect x="0" y="150" width="400" height="50" fill="#8B4513"/>
+                <ellipse cx="100" cy="120" rx="30" ry="40" fill="#228B22" className="animate-bounce"/>
+                <ellipse cx="200" cy="130" rx="25" ry="35" fill="#228B22"/>
+                <ellipse cx="300" cy="125" rx="35" ry="45" fill="#228B22" className="animate-pulse"/>
+                <text x="200" y="25" textAnchor="middle" fill="#654321" className="text-xl font-bold">🦁 Safari Adventure! 🌴</text>
+              </svg>
+            </div>
+            
             <div className="mb-4">
-              <div className="text-2xl mb-4">🌴 Safari Math Challenge 🌴</div>
-              <div className="text-6xl font-bold text-green-700 mb-6">
+              <div className="text-2xl mb-4 animate-bounce">🌴 Safari Math Challenge 🌴</div>
+              <div className="text-6xl font-bold text-green-700 mb-6 animate-pulse">
                 {problem.num1} - {problem.num2} = ?
               </div>
             </div>

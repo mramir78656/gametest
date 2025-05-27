@@ -115,8 +115,25 @@ const SpellingBeeGarden = () => {
         {/* Game Area */}
         {gameStarted && (
           <div className="bg-white rounded-xl p-8 shadow-lg text-center">
+            {/* Animated garden scene */}
             <div className="mb-6">
-              <div className="text-2xl mb-4">🌻 Listen and Spell! 🌻</div>
+              <svg width="350" height="180" className="mx-auto mb-4" viewBox="0 0 350 180">
+                <rect width="350" height="180" fill="#87CEEB" rx="15"/>
+                <circle cx="300" cy="40" r="30" fill="#FFD700" className="animate-spin"/>
+                <rect x="0" y="120" width="350" height="60" fill="#228B22"/>
+                <circle cx="80" cy="100" r="25" fill="#FF69B4" className="animate-bounce"/>
+                <rect x="77" y="100" width="6" height="20" fill="#32CD32"/>
+                <circle cx="150" cy="90" r="20" fill="#FF1493" className="animate-pulse"/>
+                <rect x="148" y="90" width="4" height="30" fill="#32CD32"/>
+                <circle cx="220" cy="95" r="22" fill="#FFB6C1" className="animate-bounce"/>
+                <rect x="218" y="95" width="4" height="25" fill="#32CD32"/>
+                <ellipse cx="50" cy="110" rx="15" ry="8" fill="#FF69B4" className="animate-pulse"/>
+                <text x="175" y="25" textAnchor="middle" fill="#4B0082" className="text-lg font-bold">🐝 Spelling Garden 🌸</text>
+              </svg>
+            </div>
+            
+            <div className="mb-6">
+              <div className="text-2xl mb-4 animate-bounce">🌻 Listen and Spell! 🌻</div>
               <button
                 onClick={speakWord}
                 className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-full text-2xl transition-all transform hover:scale-105 mb-6"

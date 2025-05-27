@@ -95,7 +95,19 @@ const AdditionArcade = () => {
         {/* Game Area */}
         {gameStarted && (
           <div className="bg-white rounded-xl p-8 shadow-lg text-center">
-            <div className="text-6xl font-bold text-purple-700 mb-6">
+            {/* Animated arcade graphics */}
+            <div className="mb-6">
+              <svg width="300" height="150" className="mx-auto mb-4" viewBox="0 0 300 150">
+                <rect width="300" height="150" fill="#4338CA" rx="20"/>
+                <rect x="20" y="20" width="260" height="110" fill="#1E1B4B" rx="10"/>
+                <circle cx="80" cy="75" r="25" fill="#F59E0B" className="animate-pulse"/>
+                <circle cx="150" cy="75" r="25" fill="#EF4444" className="animate-bounce"/>
+                <circle cx="220" cy="75" r="25" fill="#10B981" className="animate-pulse"/>
+                <text x="150" y="140" textAnchor="middle" fill="white" className="text-lg font-bold">Addition Arcade!</text>
+              </svg>
+            </div>
+            
+            <div className="text-6xl font-bold text-purple-700 mb-6 animate-bounce">
               {problem.num1} + {problem.num2} = ?
             </div>
             

@@ -145,8 +145,20 @@ const SightWordMemory = () => {
         {/* Game Area */}
         {gameStarted && (
           <div className="bg-white rounded-xl p-6 shadow-lg">
+            {/* Animated memory game header */}
+            <div className="mb-6">
+              <svg width="300" height="100" className="mx-auto" viewBox="0 0 300 100">
+                <rect width="300" height="100" fill="#E0F2FE" rx="15"/>
+                <rect x="20" y="20" width="40" height="60" fill="#3B82F6" rx="8" className="animate-pulse"/>
+                <rect x="80" y="20" width="40" height="60" fill="#10B981" rx="8" className="animate-bounce"/>
+                <rect x="140" y="20" width="40" height="60" fill="#F59E0B" rx="8" className="animate-pulse"/>
+                <rect x="200" y="20" width="40" height="60" fill="#EF4444" rx="8" className="animate-bounce"/>
+                <text x="150" y="95" textAnchor="middle" fill="#1E40AF" className="text-sm font-bold">🧠 Memory Challenge!</text>
+              </svg>
+            </div>
+            
             <div className="text-center mb-6">
-              <div className="text-xl font-bold text-gray-700">
+              <div className="text-xl font-bold text-gray-700 animate-bounce">
                 Matches Found: {matches} / {Math.floor(cards.length / 2)}
               </div>
             </div>
