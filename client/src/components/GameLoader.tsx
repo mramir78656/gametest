@@ -14,14 +14,45 @@ const GameLoader = ({ gameSlug, isMuted, onScoreUpdate }: GameLoaderProps) => {
   useEffect(() => {
     const loadComponent = async () => {
       try {
-        // Convert game slug to PascalCase for component naming
-        const pascalCaseSlug = gameSlug
-          .split('-')
-          .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-          .join('');
-
-        // Dynamic import based on game slug
-        const module = await import(`../games/${pascalCaseSlug}/index.tsx`);
+        let module;
+        
+        // Load specific game components
+        switch (gameSlug) {
+          case 'space-math-explorer':
+            module = await import('../games/SpaceMathExplorer');
+            break;
+          case 'pirate-treasure-multiplication':
+            module = await import('../games/PirateTreasureMultiplication');
+            break;
+          default:
+            // Try to load from games folder with PascalCase naming
+            const pascalCaseSlug = gameSlug
+              .split('-')
+              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+              .join('');
+            try {
+              module = await import(`../games/${pascalCaseSlug}/index.tsx`);
+            } catch {
+              // Fallback to a simple placeholder game
+              setComponent(() => ({ onScoreUpdate }: { onScoreUpdate?: (score: number) => void }) => (
+                <div className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 flex items-center justify-center">
+                  <div className="text-center text-white p-8 bg-black/30 rounded-lg backdrop-blur-sm">
+                    <h1 className="text-4xl font-bold mb-4">🎮 {gameSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</h1>
+                    <p className="text-xl mb-6">This exciting game is being prepared for you!</p>
+                    <div className="text-6xl animate-bounce mb-4">🚀</div>
+                    <button 
+                      onClick={() => onScoreUpdate?.(100)}
+                      className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg text-2xl font-bold transition-colors"
+                    >
+                      Play Demo! ⭐
+                    </button>
+                  </div>
+                </div>
+              ));
+              return;
+            }
+        }
+        
         setComponent(() => module.default);
       } catch (err) {
         console.error(`Failed to load game: ${gameSlug}`, err);
