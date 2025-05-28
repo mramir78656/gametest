@@ -24,6 +24,15 @@ const GameLoader = ({ gameSlug, isMuted, onScoreUpdate }: GameLoaderProps) => {
           case 'pirate-treasure-multiplication':
             module = await import('../games/PirateTreasureMultiplication');
             break;
+          case 'grammar-castle-adventure':
+            module = await import('../games/GrammarCastleAdventure');
+            break;
+          case 'dinosaur-fossil-fractions':
+            module = await import('../games/DinosaurFossilFractions');
+            break;
+          case 'superhero-sight-words':
+            module = await import('../games/SuperheroSightWords');
+            break;
           default:
             // Try to load from games folder with PascalCase naming
             const pascalCaseSlug = gameSlug
