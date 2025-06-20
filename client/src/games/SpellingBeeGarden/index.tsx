@@ -1,198 +1,374 @@
-import { useState, useEffect } from 'react';
-import { useUser } from '@/contexts/UserContext';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Flower, Volume2, VolumeX } from 'lucide-react';
 
-const SpellingBeeGarden = () => {
+interface SpellingBeeGardenProps {
+  onScoreUpdate?: (score: number) => void;
+}
+
+const SpellingBeeGarden: React.FC<SpellingBeeGardenProps> = ({ onScoreUpdate }) => {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
   const [currentWord, setCurrentWord] = useState('');
-  const [userSpelling, setUserSpelling] = useState('');
+  const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(true);
-  const [flowers, setFlowers] = useState(0);
-  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
-  const { user } = useUser();
-
-  // Simple 1st grade words
+  const [flowersGrown, setFlowersGrown] = useState(0);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const currentWordRef = useRef('');
+  
   const words = [
-    'cat', 'dog', 'run', 'sun', 'fun', 'big', 'red', 'hat', 'bat', 'sit',
-    'top', 'hop', 'map', 'cup', 'yes', 'fox', 'box', 'six', 'mix', 'fix',
-    'pen', 'hen', 'ten', 'web', 'bed', 'leg', 'egg', 'bag', 'tag', 'wag'
+    // Level 1 - Simple 3-letter words
+    { word: 'cat', level: 1, hint: 'A furry pet that says meow' },
+    { word: 'dog', level: 1, hint: 'A loyal pet that barks' },
+    { word: 'sun', level: 1, hint: 'The bright star in the sky' },
+    { word: 'run', level: 1, hint: 'Move very fast with your legs' },
+    { word: 'hop', level: 1, hint: 'Jump like a bunny' },
+    
+    // Level 2 - 4-letter words
+    { word: 'tree', level: 2, hint: 'Tall plant with leaves and bark' },
+    { word: 'bird', level: 2, hint: 'Animal that flies and has feathers' },
+    { word: 'fish', level: 2, hint: 'Animal that swims in water' },
+    { word: 'book', level: 2, hint: 'You read this for stories' },
+    { word: 'cake', level: 2, hint: 'Sweet dessert for birthdays' },
+    
+    // Level 3 - 5-letter words
+    { word: 'happy', level: 3, hint: 'Feeling joyful and glad' },
+    { word: 'house', level: 3, hint: 'Building where people live' },
+    { word: 'green', level: 3, hint: 'Color of grass and leaves' },
+    { word: 'water', level: 3, hint: 'Clear liquid we drink' },
+    { word: 'smile', level: 3, hint: 'Happy expression on your face' },
   ];
 
-  const generateWord = () => {
-    const randomWord = words[Math.floor(Math.random() * words.length)];
-    setCurrentWord(randomWord);
-    setUserSpelling('');
-    setShowFeedback(false);
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    generateWord();
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  const playSound = (type: 'correct' | 'incorrect' | 'flower' | 'bee' | 'click' | 'levelUp') => {
+    if (!audioContextRef.current || !isSoundEnabled) return;
+
+    const ctx = audioContextRef.current;
+    
+    switch (type) {
+      case 'correct':
+        // Happy bell sound
+        [523.25, 659.25, 783.99].forEach((freq, index) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + index * 0.1);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime + index * 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + index * 0.1 + 0.4);
+          osc.start(ctx.currentTime + index * 0.1);
+          osc.stop(ctx.currentTime + index * 0.1 + 0.4);
+        });
+        break;
+      
+      case 'incorrect':
+        // Gentle correction sound
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.frequency.setValueAtTime(220, ctx.currentTime);
+        gain1.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc1.start(ctx.currentTime);
+        osc1.stop(ctx.currentTime + 0.3);
+        break;
+
+      case 'flower':
+        // Magical flower growing sound
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.frequency.setValueAtTime(440, ctx.currentTime);
+        osc2.frequency.setValueAtTime(880, ctx.currentTime + 0.3);
+        osc2.frequency.setValueAtTime(1320, ctx.currentTime + 0.6);
+        gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.8);
+        break;
+
+      case 'bee':
+        // Bee buzzing sound
+        const osc3 = ctx.createOscillator();
+        const gain3 = ctx.createGain();
+        osc3.connect(gain3);
+        gain3.connect(ctx.destination);
+        osc3.frequency.setValueAtTime(200, ctx.currentTime);
+        osc3.frequency.setValueAtTime(250, ctx.currentTime + 0.1);
+        osc3.frequency.setValueAtTime(200, ctx.currentTime + 0.2);
+        gain3.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain3.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc3.start(ctx.currentTime);
+        osc3.stop(ctx.currentTime + 0.3);
+        break;
+
+      case 'click':
+        const osc4 = ctx.createOscillator();
+        const gain4 = ctx.createGain();
+        osc4.connect(gain4);
+        gain4.connect(ctx.destination);
+        osc4.frequency.setValueAtTime(800, ctx.currentTime);
+        gain4.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain4.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc4.start(ctx.currentTime);
+        osc4.stop(ctx.currentTime + 0.1);
+        break;
+
+      case 'levelUp':
+        // Magical level up sound
+        [261.63, 329.63, 392.00, 523.25, 659.25].forEach((freq, index) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + index * 0.15);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime + index * 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + index * 0.15 + 0.5);
+          osc.start(ctx.currentTime + index * 0.15);
+          osc.stop(ctx.currentTime + index * 0.15 + 0.5);
+        });
+        break;
+    }
   };
 
-  const speakWord = () => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(currentWord);
+  const speakWord = (word: string) => {
+    if ('speechSynthesis' in window && isSoundEnabled) {
+      const utterance = new SpeechSynthesisUtterance(word);
       utterance.rate = 0.7;
       utterance.pitch = 1.2;
-      utterance.voice = speechSynthesis.getVoices().find(voice => voice.name.includes('Google')) || speechSynthesis.getVoices()[0];
       speechSynthesis.speak(utterance);
     }
   };
 
+  const generateWord = () => {
+    const levelWords = words.filter(w => w.level <= level);
+    const randomWord = levelWords[Math.floor(Math.random() * levelWords.length)];
+    setCurrentWord(randomWord.word);
+    currentWordRef.current = randomWord.word;
+    setAnswer('');
+    setFeedback('');
+    setIsCorrect(null);
+    
+    // Automatically speak the word
+    setTimeout(() => speakWord(randomWord.word), 500);
+  };
+
   const checkSpelling = () => {
-    if (userSpelling.toLowerCase() === currentWord.toLowerCase()) {
-      setFeedback('🌸 Perfect spelling! You grew a flower!');
-      setScore(score + 20);
-      setFlowers(flowers + 1);
+    playSound('click');
+    const userAnswer = answer.toLowerCase().trim();
+    const correctWord = currentWord.toLowerCase();
+    
+    if (userAnswer === correctWord) {
+      playSound('correct');
+      setTimeout(() => playSound('flower'), 400);
+      setTimeout(() => playSound('bee'), 800);
       
-      if (flowers + 1 >= 10) {
+      const newScore = score + (currentWord.length * 5);
+      const newStreak = streak + 1;
+      const newFlowers = flowersGrown + 1;
+      
+      setScore(newScore);
+      setStreak(newStreak);
+      setFlowersGrown(newFlowers);
+      setIsCorrect(true);
+      setFeedback(`Perfect! You grew a beautiful flower! 🌸`);
+      
+      if (newFlowers % 5 === 0 && level < 3) {
+        setTimeout(() => playSound('levelUp'), 1200);
         setLevel(level + 1);
-        setFlowers(0);
+        setFeedback(`Garden Level Up! You're becoming a spelling expert! 🌻`);
       }
+      
+      onScoreUpdate?.(newScore);
       
       setTimeout(() => {
         generateWord();
       }, 2000);
     } else {
-      setFeedback('🐝 Buzz! Try again, little bee!');
+      playSound('incorrect');
+      setIsCorrect(false);
+      setStreak(0);
+      setFeedback(`Almost there! The correct spelling is "${currentWord}". Try the next word!`);
+      
+      setTimeout(() => {
+        generateWord();
+      }, 3000);
     }
-    setShowFeedback(true);
   };
 
-  const startGame = () => {
-    setGameStarted(true);
-    setShowInstructions(false);
-    generateWord();
-  };
-
-  const resetGame = () => {
-    setScore(0);
-    setLevel(1);
-    setFlowers(0);
-    setGameStarted(false);
-    setShowInstructions(true);
-  };
-
-  useEffect(() => {
-    if (gameStarted && currentWord) {
-      // Auto-speak the word when it changes
-      setTimeout(() => speakWord(), 500);
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      checkSpelling();
     }
-  }, [currentWord, gameStarted]);
+  };
+
+  const repeatWord = () => {
+    playSound('click');
+    speakWord(currentWord);
+  };
+
+  const getCurrentWordInfo = () => {
+    return words.find(w => w.word === currentWord);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-200 via-purple-200 to-yellow-200 p-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-sky-300 via-green-200 to-yellow-200 p-4">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-purple-800 mb-2">🐝 Spelling Bee Garden</h1>
-          <div className="flex justify-center items-center space-x-6 bg-white rounded-full p-4 shadow-lg">
-            <div className="text-lg font-bold text-purple-600">Score: {score}</div>
-            <div className="text-lg font-bold text-pink-600">Garden Level: {level}</div>
-            <div className="text-lg font-bold text-yellow-600">
-              Flowers: {'🌸'.repeat(flowers)} ({flowers}/10)
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <h1 className="text-4xl font-bold text-green-800 drop-shadow-lg">Spelling Bee Garden</h1>
+            <button 
+              onClick={() => setIsSoundEnabled(!isSoundEnabled)}
+              className="text-green-800"
+            >
+              {isSoundEnabled ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
+            </button>
+          </div>
+          <div className="flex items-center gap-6 text-green-800">
+            <div className="flex items-center gap-2">
+              <Flower className="w-6 h-6 text-pink-500" />
+              <span className="text-2xl font-bold">{flowersGrown}</span>
             </div>
+            <div className="text-xl">Score: {score}</div>
+            <div className="text-xl">Garden Level: {level}</div>
           </div>
         </div>
 
-        {/* Instructions */}
-        {showInstructions && (
-          <div className="bg-white rounded-xl p-6 shadow-lg mb-6 text-center">
-            <h2 className="text-2xl font-bold text-purple-700 mb-4">🌻 How to Play Garden Spelling</h2>
-            <div className="text-lg text-gray-700 space-y-2">
-              <p>🐝 Listen to the word and spell it correctly!</p>
-              <p>🌸 Grow 10 flowers to complete your garden!</p>
-              <p>🔊 Click the sound button to hear the word again!</p>
-            </div>
-            <button 
-              onClick={startGame}
-              className="mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full text-xl transition-all transform hover:scale-105"
-            >
-              🌱 Start Gardening!
-            </button>
-          </div>
-        )}
-
         {/* Game Area */}
-        {gameStarted && (
-          <div className="bg-white rounded-xl p-8 shadow-lg text-center">
-            {/* Animated garden scene */}
-            <div className="mb-6">
-              <svg width="350" height="180" className="mx-auto mb-4" viewBox="0 0 350 180">
-                <rect width="350" height="180" fill="#87CEEB" rx="15"/>
-                <circle cx="300" cy="40" r="30" fill="#FFD700" className="animate-spin"/>
-                <rect x="0" y="120" width="350" height="60" fill="#228B22"/>
-                <circle cx="80" cy="100" r="25" fill="#FF69B4" className="animate-bounce"/>
-                <rect x="77" y="100" width="6" height="20" fill="#32CD32"/>
-                <circle cx="150" cy="90" r="20" fill="#FF1493" className="animate-pulse"/>
-                <rect x="148" y="90" width="4" height="30" fill="#32CD32"/>
-                <circle cx="220" cy="95" r="22" fill="#FFB6C1" className="animate-bounce"/>
-                <rect x="218" y="95" width="4" height="25" fill="#32CD32"/>
-                <ellipse cx="50" cy="110" rx="15" ry="8" fill="#FF69B4" className="animate-pulse"/>
-                <text x="175" y="25" textAnchor="middle" fill="#4B0082" className="text-lg font-bold">🐝 Spelling Garden 🌸</text>
-              </svg>
-            </div>
-            
-            <div className="mb-6">
-              <div className="text-2xl mb-4 animate-bounce">🌻 Listen and Spell! 🌻</div>
-              <button
-                onClick={speakWord}
-                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-full text-2xl transition-all transform hover:scale-105 mb-6"
+        <Card className="bg-white/90 backdrop-blur-sm shadow-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl text-green-600">
+              Listen and Spell the Word! 🐝
+            </CardTitle>
+            <p className="text-lg text-gray-600">Spell correctly to grow beautiful flowers</p>
+          </CardHeader>
+          <CardContent className="text-center space-y-6">
+            {/* Word Audio Section */}
+            <div className="bg-gradient-to-r from-yellow-100 to-green-100 p-8 rounded-xl border-4 border-yellow-300">
+              <div className="text-lg text-green-700 mb-4">
+                🐝 Listen carefully and spell the word! 🌻
+              </div>
+              
+              <Button
+                onClick={repeatWord}
+                className="text-2xl px-8 py-6 bg-yellow-400 hover:bg-yellow-500 text-green-800 mb-6"
               >
-                🔊 Hear Word
-              </button>
-            </div>
-            
-            <div className="mb-6">
-              <input
-                type="text"
-                value={userSpelling}
-                onChange={(e) => setUserSpelling(e.target.value)}
-                className="text-3xl text-center border-4 border-pink-300 rounded-xl p-4 w-64 focus:border-pink-500 focus:outline-none lowercase"
-                placeholder="spell here..."
-                onKeyPress={(e) => e.key === 'Enter' && checkSpelling()}
-              />
-            </div>
-
-            <button
-              onClick={checkSpelling}
-              disabled={!userSpelling}
-              className="bg-pink-500 hover:bg-pink-600 disabled:bg-gray-300 text-white font-bold py-3 px-8 rounded-full text-xl transition-all transform hover:scale-105 mb-6"
-            >
-              🌸 Plant Flower!
-            </button>
-
-            {/* Visual garden */}
-            <div className="mb-6 p-4 bg-green-100 rounded-xl">
-              <div className="text-lg mb-2">🌱 Your Beautiful Garden:</div>
-              <div className="flex justify-center flex-wrap">
-                {Array(flowers).fill('🌸').map((flower, i) => (
-                  <span key={i} className="text-3xl m-1 animate-pulse">{flower}</span>
-                ))}
-                {Array(10 - flowers).fill('🌱').map((seed, i) => (
-                  <span key={i} className="text-2xl m-1 opacity-50">{seed}</span>
-                ))}
+                🔊 Hear Word Again
+              </Button>
+              
+              {getCurrentWordInfo() && (
+                <div className="text-md text-gray-600 mb-4 italic">
+                  Hint: {getCurrentWordInfo()?.hint}
+                </div>
+              )}
+              
+              {/* Spelling Input */}
+              <div className="flex justify-center gap-4">
+                <Input
+                  type="text"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="text-3xl text-center w-64 h-16"
+                  placeholder="Type the word here..."
+                  autoFocus
+                />
+                <Button
+                  onClick={checkSpelling}
+                  className="text-xl px-8 h-16 bg-green-500 hover:bg-green-600"
+                  disabled={!answer}
+                >
+                  Plant Flower
+                </Button>
               </div>
             </div>
 
             {/* Feedback */}
-            {showFeedback && (
-              <div className={`p-4 rounded-xl text-xl font-bold ${
-                feedback.includes('Perfect') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+            {feedback && (
+              <div className={`text-2xl font-bold p-4 rounded-lg ${
+                isCorrect 
+                  ? 'bg-green-100 text-green-700' 
+                  : isCorrect === false 
+                    ? 'bg-orange-100 text-orange-700'
+                    : 'bg-blue-100 text-blue-700'
               }`}>
                 {feedback}
               </div>
             )}
 
-            <div className="mt-6">
-              <button
-                onClick={resetGame}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full transition-all"
-              >
-                🔄 New Garden
-              </button>
+            {/* Streak Indicator */}
+            {streak > 0 && (
+              <div className="bg-yellow-100 p-4 rounded-lg">
+                <div className="text-xl text-yellow-700">
+                  🔥 Spelling Streak: {streak} words in a row!
+                </div>
+              </div>
+            )}
+
+            {/* Garden Progress */}
+            <div className="bg-green-100 p-4 rounded-lg">
+              <div className="text-xl text-green-700">
+                🌺 Flowers in Garden: {flowersGrown} | 🏆 Garden Level: {level}/3
+              </div>
+              <div className="text-sm text-gray-600 mt-2">
+                Spell 5 words correctly to advance your garden level!
+              </div>
             </div>
+
+            {/* Encouragement */}
+            <div className="text-lg text-gray-600">
+              {flowersGrown < 3 && "Great start! Keep spelling to grow your garden!"}
+              {flowersGrown >= 3 && flowersGrown < 10 && "Your garden is blooming beautifully!"}
+              {flowersGrown >= 10 && "Amazing spelling bee! Your garden is magnificent! 🌟"}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Flower Garden Display */}
+        <div className="mt-8 bg-white/80 p-6 rounded-lg">
+          <h3 className="text-2xl font-bold text-center text-green-700 mb-4">Your Flower Garden</h3>
+          <div className="flex justify-center flex-wrap gap-3">
+            {[...Array(Math.min(flowersGrown, 25))].map((_, i) => {
+              const flowers = ['🌸', '🌺', '🌻', '🌷', '🌹', '🌼'];
+              const flower = flowers[i % flowers.length];
+              return (
+                <div 
+                  key={i} 
+                  className="text-4xl animate-bounce"
+                  style={{ 
+                    animationDelay: `${i * 0.1}s`,
+                    animationDuration: '2s'
+                  }}
+                >
+                  {flower}
+                </div>
+              );
+            })}
           </div>
-        )}
+          {flowersGrown === 0 && (
+            <div className="text-center text-gray-500 text-lg">
+              🌱 Your garden is ready for flowers! Start spelling to plant them! 🌱
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

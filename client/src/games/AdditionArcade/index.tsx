@@ -1,154 +1,256 @@
-import { useState, useEffect } from 'react';
-import { useUser } from '@/contexts/UserContext';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Star, Trophy, Volume2 } from 'lucide-react';
 
-const AdditionArcade = () => {
+interface AdditionArcadeProps {
+  onScoreUpdate?: (score: number) => void;
+}
+
+const AdditionArcade: React.FC<AdditionArcadeProps> = ({ onScoreUpdate }) => {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
-  const [problem, setProblem] = useState({ num1: 0, num2: 0, answer: 0 });
-  const [userAnswer, setUserAnswer] = useState('');
+  const [currentProblem, setCurrentProblem] = useState({ num1: 0, num2: 0 });
+  const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(true);
   const [stars, setStars] = useState(0);
-  const { user } = useUser();
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [streak, setStreak] = useState(0);
+  
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  // Initialize audio context
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    generateProblem();
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  // Generate sound effects using Web Audio API
+  const playSound = (type: 'correct' | 'incorrect' | 'star' | 'levelUp' | 'click') => {
+    if (!audioContextRef.current) return;
+
+    const ctx = audioContextRef.current;
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    switch (type) {
+      case 'correct':
+        // Happy chime sound
+        oscillator.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+        oscillator.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+        oscillator.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        oscillator.start(ctx.currentTime);
+        oscillator.stop(ctx.currentTime + 0.5);
+        break;
+      
+      case 'incorrect':
+        // Gentle error sound
+        oscillator.frequency.setValueAtTime(220, ctx.currentTime); // A3
+        oscillator.frequency.setValueAtTime(196, ctx.currentTime + 0.2); // G3
+        gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        oscillator.start(ctx.currentTime);
+        oscillator.stop(ctx.currentTime + 0.4);
+        break;
+
+      case 'star':
+        // Sparkling star sound
+        oscillator.frequency.setValueAtTime(880, ctx.currentTime); // A5
+        oscillator.frequency.setValueAtTime(1108.73, ctx.currentTime + 0.1); // C#6
+        oscillator.frequency.setValueAtTime(1318.51, ctx.currentTime + 0.2); // E6
+        gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+        oscillator.start(ctx.currentTime);
+        oscillator.stop(ctx.currentTime + 0.6);
+        break;
+
+      case 'levelUp':
+        // Victory fanfare
+        const frequencies = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+        frequencies.forEach((freq, index) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + index * 0.2);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime + index * 0.2);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + index * 0.2 + 0.4);
+          osc.start(ctx.currentTime + index * 0.2);
+          osc.stop(ctx.currentTime + index * 0.2 + 0.4);
+        });
+        break;
+
+      case 'click':
+        // Button click sound
+        oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+        gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        oscillator.start(ctx.currentTime);
+        oscillator.stop(ctx.currentTime + 0.1);
+        break;
+    }
+  };
 
   const generateProblem = () => {
-    // Simple addition for 1st grade (1-10)
-    const num1 = Math.floor(Math.random() * 9) + 1;
-    const num2 = Math.floor(Math.random() * 9) + 1;
-    const answer = num1 + num2;
-    
-    setProblem({ num1, num2, answer });
-    setUserAnswer('');
-    setShowFeedback(false);
+    const maxNum = Math.min(5 + level * 2, 20);
+    const num1 = Math.floor(Math.random() * maxNum) + 1;
+    const num2 = Math.floor(Math.random() * maxNum) + 1;
+    setCurrentProblem({ num1, num2 });
+    setAnswer('');
+    setFeedback('');
+    setIsCorrect(null);
   };
 
   const checkAnswer = () => {
-    const answer = parseInt(userAnswer);
-    if (answer === problem.answer) {
-      setFeedback('🌟 Awesome! That\'s correct!');
-      setScore(score + 10);
-      setStars(stars + 1);
+    playSound('click');
+    const userAnswer = parseInt(answer);
+    const correctAnswer = currentProblem.num1 + currentProblem.num2;
+    
+    if (userAnswer === correctAnswer) {
+      playSound('correct');
+      const newScore = score + 10;
+      const newStreak = streak + 1;
+      setScore(newScore);
+      setStreak(newStreak);
+      setIsCorrect(true);
+      setFeedback('Great job! ⭐');
       
-      if (stars + 1 >= 10) {
-        setLevel(level + 1);
-        setStars(0);
+      if (newStreak % 3 === 0) {
+        playSound('star');
+        setStars(stars + 1);
       }
+      
+      if (newScore % 100 === 0) {
+        playSound('levelUp');
+        setLevel(level + 1);
+        setFeedback('Level Up! Amazing work! 🏆');
+      }
+      
+      onScoreUpdate?.(newScore);
       
       setTimeout(() => {
         generateProblem();
       }, 1500);
     } else {
-      setFeedback('🤔 Try again! You can do it!');
+      playSound('incorrect');
+      setIsCorrect(false);
+      setStreak(0);
+      setFeedback(`Try again! The answer is ${correctAnswer}`);
+      
+      setTimeout(() => {
+        generateProblem();
+      }, 2000);
     }
-    setShowFeedback(true);
   };
 
-  const startGame = () => {
-    setGameStarted(true);
-    setShowInstructions(false);
-    generateProblem();
-  };
-
-  const resetGame = () => {
-    setScore(0);
-    setLevel(1);
-    setStars(0);
-    setGameStarted(false);
-    setShowInstructions(true);
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      checkAnswer();
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-200 to-purple-300 p-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-purple-400 via-pink-300 to-yellow-300 p-4">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-purple-800 mb-2">🎯 Addition Arcade</h1>
-          <div className="flex justify-center items-center space-x-6 bg-white rounded-full p-4 shadow-lg">
-            <div className="text-lg font-bold text-blue-600">Score: {score}</div>
-            <div className="text-lg font-bold text-green-600">Level: {level}</div>
-            <div className="text-lg font-bold text-yellow-600">
-              Stars: {'⭐'.repeat(stars)} ({stars}/10)
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <h1 className="text-4xl font-bold text-white drop-shadow-lg">Addition Arcade</h1>
+            <Volume2 className="text-white w-6 h-6" />
+          </div>
+          <div className="flex items-center gap-6 text-white">
+            <div className="flex items-center gap-2">
+              <Star className="w-6 h-6 text-yellow-300" />
+              <span className="text-2xl font-bold">{stars}</span>
             </div>
+            <div className="text-xl">Score: {score}</div>
+            <div className="text-xl">Level: {level}</div>
           </div>
         </div>
 
-        {/* Instructions */}
-        {showInstructions && (
-          <div className="bg-white rounded-xl p-6 shadow-lg mb-6 text-center">
-            <h2 className="text-2xl font-bold text-purple-700 mb-4">🎮 How to Play</h2>
-            <div className="text-lg text-gray-700 space-y-2">
-              <p>🔢 Solve addition problems to earn stars!</p>
-              <p>⭐ Get 10 stars to level up!</p>
-              <p>🎯 Type your answer and click Check!</p>
-            </div>
-            <button 
-              onClick={startGame}
-              className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-xl transition-all transform hover:scale-105"
-            >
-              🚀 Start Playing!
-            </button>
-          </div>
-        )}
-
         {/* Game Area */}
-        {gameStarted && (
-          <div className="bg-white rounded-xl p-8 shadow-lg text-center">
-            {/* Animated arcade graphics */}
-            <div className="mb-6">
-              <svg width="300" height="150" className="mx-auto mb-4" viewBox="0 0 300 150">
-                <rect width="300" height="150" fill="#4338CA" rx="20"/>
-                <rect x="20" y="20" width="260" height="110" fill="#1E1B4B" rx="10"/>
-                <circle cx="80" cy="75" r="25" fill="#F59E0B" className="animate-pulse"/>
-                <circle cx="150" cy="75" r="25" fill="#EF4444" className="animate-bounce"/>
-                <circle cx="220" cy="75" r="25" fill="#10B981" className="animate-pulse"/>
-                <text x="150" y="140" textAnchor="middle" fill="white" className="text-lg font-bold">Addition Arcade!</text>
-              </svg>
+        <Card className="bg-white/90 backdrop-blur-sm shadow-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl text-purple-600">
+              Solve the Addition Problem!
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center space-y-6">
+            {/* Math Problem */}
+            <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-8 rounded-xl">
+              <div className="text-6xl font-bold text-purple-700 mb-4">
+                {currentProblem.num1} + {currentProblem.num2} = ?
+              </div>
+              
+              {/* Answer Input */}
+              <div className="flex justify-center gap-4">
+                <Input
+                  type="number"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="text-3xl text-center w-32 h-16"
+                  placeholder="?"
+                  autoFocus
+                />
+                <Button
+                  onClick={checkAnswer}
+                  className="text-xl px-8 h-16 bg-green-500 hover:bg-green-600"
+                  disabled={!answer}
+                >
+                  Check Answer
+                </Button>
+              </div>
             </div>
-            
-            <div className="text-6xl font-bold text-purple-700 mb-6 animate-bounce">
-              {problem.num1} + {problem.num2} = ?
-            </div>
-            
-            <div className="mb-6">
-              <input
-                type="number"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                className="text-4xl text-center border-4 border-purple-300 rounded-xl p-4 w-32 focus:border-purple-500 focus:outline-none"
-                placeholder="?"
-                onKeyPress={(e) => e.key === 'Enter' && checkAnswer()}
-              />
-            </div>
-
-            <button
-              onClick={checkAnswer}
-              disabled={!userAnswer}
-              className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white font-bold py-3 px-8 rounded-full text-xl transition-all transform hover:scale-105 mb-4"
-            >
-              ✅ Check Answer
-            </button>
 
             {/* Feedback */}
-            {showFeedback && (
-              <div className={`p-4 rounded-xl text-xl font-bold ${
-                feedback.includes('Awesome') ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+            {feedback && (
+              <div className={`text-2xl font-bold p-4 rounded-lg ${
+                isCorrect 
+                  ? 'bg-green-100 text-green-700' 
+                  : isCorrect === false 
+                    ? 'bg-orange-100 text-orange-700'
+                    : 'bg-blue-100 text-blue-700'
               }`}>
                 {feedback}
               </div>
             )}
 
-            <div className="mt-6">
-              <button
-                onClick={resetGame}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full transition-all"
-              >
-                🔄 New Game
-              </button>
+            {/* Streak Indicator */}
+            {streak > 0 && (
+              <div className="bg-yellow-100 p-4 rounded-lg">
+                <div className="text-xl text-yellow-700">
+                  🔥 Streak: {streak} correct in a row!
+                </div>
+              </div>
+            )}
+
+            {/* Encouragement */}
+            <div className="text-lg text-gray-600">
+              {score < 50 && "You're doing great! Keep solving problems!"}
+              {score >= 50 && score < 100 && "Fantastic work! You're getting better!"}
+              {score >= 100 && "You're an addition superstar! 🌟"}
             </div>
-          </div>
-        )}
+          </CardContent>
+        </Card>
+
+        {/* Visual Decorations */}
+        <div className="mt-8 flex justify-center">
+          {[...Array(Math.min(stars, 10))].map((_, i) => (
+            <Star key={i} className="w-8 h-8 text-yellow-400 mx-1 animate-pulse" fill="currentColor" />
+          ))}
+        </div>
       </div>
     </div>
   );
