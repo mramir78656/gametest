@@ -302,7 +302,235 @@ export class MemStorage implements IStorage {
   
   // Initialize with mock data
   private initializeData() {
-    // Add mock data initialization if needed
+    // Add grades
+    const gradesData = [
+      { id: 1, name: "PreK", slug: "prek", displayOrder: 1, color: "#FF9F1C", icon: "star", description: "Games for Pre-Kindergarten students ages 3-5" },
+      { id: 2, name: "Kindergarten", slug: "kindergarten", displayOrder: 2, color: "#FF4D6D", icon: "apple-alt", description: "Games for Kindergarten students ages 5-6" },
+      { id: 3, name: "1st Grade", slug: "grade-1", displayOrder: 3, color: "#7209B7", icon: "pencil-alt", description: "Games for 1st Grade students ages 6-7" },
+      { id: 4, name: "2nd Grade", slug: "grade-2", displayOrder: 4, color: "#4CC9F0", icon: "book", description: "Games for 2nd Grade students ages 7-8" },
+      { id: 5, name: "3rd Grade", slug: "grade-3", displayOrder: 5, color: "#8AC926", icon: "calculator", description: "Games for 3rd Grade students ages 8-9" },
+      { id: 6, name: "4th Grade", slug: "grade-4", displayOrder: 6, color: "#1982C4", icon: "globe-americas", description: "Games for 4th Grade students ages 9-10" },
+    ];
+    
+    gradesData.forEach(grade => this.grades.set(grade.id, grade));
+
+    // Add subjects
+    const subjectsData = [
+      { id: 1, name: "Math", slug: "math", icon: "calculator", color: "#4361ee", displayOrder: 1, description: "Games that teach math concepts and skills" },
+      { id: 2, name: "Reading", slug: "reading", icon: "book", color: "#7209b7", displayOrder: 2, description: "Games that improve reading and literacy" },
+      { id: 3, name: "Science", slug: "science", icon: "flask", color: "#38b000", displayOrder: 3, description: "Games that explore scientific concepts" },
+      { id: 4, name: "Social Studies", slug: "social-studies", icon: "globe", color: "#fb8500", displayOrder: 4, description: "Games about history, geography, and culture" },
+      { id: 5, name: "Art", slug: "art", icon: "palette", color: "#f72585", displayOrder: 5, description: "Games that inspire creativity and artistic expression" },
+      { id: 6, name: "Music", slug: "music", icon: "music", color: "#3a0ca3", displayOrder: 6, description: "Games that teach music skills and appreciation" },
+      { id: 7, name: "Typing", slug: "typing", icon: "keyboard", color: "#4895ef", displayOrder: 7, description: "Games that help develop typing skills" },
+      { id: 8, name: "Logic", slug: "logic", icon: "brain", color: "#ff9f1c", displayOrder: 8, description: "Games that develop critical thinking and problem solving" },
+    ];
+    
+    subjectsData.forEach(subject => this.subjects.set(subject.id, subject));
+
+    // Add sample games for each grade
+    const gamesData = [
+      // 1st Grade Games
+      {
+        id: 21,
+        title: "Addition Arcade",
+        slug: "addition-arcade",
+        description: "Solve addition problems to earn stars in this colorful arcade game! Perfect for 1st graders learning basic math.",
+        instructions: "Look at the math problem and type your answer. Click Check Answer to see if you're correct!",
+        educationalBenefits: "Practice basic addition, develop number sense, build math confidence",
+        thumbnail: "addition-arcade.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["addition", "math", "numbers"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 15,
+        averageRating: 4.9,
+        learningOutcomes: "Students will master basic addition facts 1-10",
+        curriculumStandards: "Meets Common Core Math Standards 1.OA.A.1",
+        accessibility: "Keyboard controls, high contrast mode"
+      },
+      {
+        id: 22,
+        title: "Subtraction Safari",
+        slug: "subtraction-safari",
+        description: "Help safari animals learn subtraction! Solve problems to discover amazing animals in their natural habitats.",
+        instructions: "Count the animals and solve the subtraction problem. Find safari animals as you learn!",
+        educationalBenefits: "Practice subtraction, learn about animals, develop counting skills",
+        thumbnail: "subtraction-safari.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["subtraction", "math", "animals"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 15,
+        averageRating: 4.8,
+        learningOutcomes: "Students will master basic subtraction facts 1-10",
+        curriculumStandards: "Meets Common Core Math Standards 1.OA.A.1",
+        accessibility: "Keyboard controls, visual counting aids"
+      },
+      {
+        id: 23,
+        title: "Spelling Bee Garden",
+        slug: "spelling-bee-garden",
+        description: "Listen to words and spell them correctly to grow a beautiful flower garden! Audio-based spelling practice.",
+        instructions: "Listen to the word, then type the spelling. Grow flowers for each correct answer!",
+        educationalBenefits: "Improve spelling, enhance listening skills, build vocabulary",
+        thumbnail: "spelling-bee-garden.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["spelling", "reading", "phonics"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 12,
+        averageRating: 4.9,
+        learningOutcomes: "Students will improve spelling of common 1st grade words",
+        curriculumStandards: "Meets Common Core Language Standards 1.L.2",
+        accessibility: "Audio pronunciation, keyboard controls"
+      },
+      {
+        id: 24,
+        title: "Sight Word Memory",
+        slug: "sight-word-memory",
+        description: "Match pairs of sight words in this memory game! Learn essential reading words through fun gameplay.",
+        instructions: "Click cards to flip them and find matching sight word pairs. Remember where each word is!",
+        educationalBenefits: "Learn sight words, improve memory, enhance reading fluency",
+        thumbnail: "sight-word-memory.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["sight-words", "reading", "memory"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 10,
+        averageRating: 4.8,
+        learningOutcomes: "Students will recognize common sight words instantly",
+        curriculumStandards: "Meets Common Core Reading Standards 1.RF.3.g",
+        accessibility: "Keyboard navigation, high contrast mode"
+      },
+      // 2nd Grade Games
+      {
+        id: 100,
+        title: "Space Math Explorer",
+        slug: "space-math-explorer",
+        description: "Blast off into space and solve 2-digit addition and subtraction problems! Help the astronaut collect stars and fuel for the rocket ship.",
+        instructions: "Solve math problems to power your rocket and explore different planets. Use the number pad or click on answers!",
+        educationalBenefits: "Master 2-digit addition and subtraction, develop mental math skills, practice regrouping",
+        thumbnail: "space-math-explorer.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["addition", "subtraction", "2-digit", "space"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 8,
+        maxPlayTime: 15,
+        averageRating: 4.9,
+        learningOutcomes: "Students will solve 2-digit addition and subtraction with regrouping",
+        curriculumStandards: "Meets Common Core Math Standards 2.NBT.B.5-7",
+        accessibility: "Large space-themed buttons, clear number display, audio feedback"
+      },
+      {
+        id: 101,
+        title: "Pirate Treasure Multiplication",
+        slug: "pirate-treasure-multiplication",
+        description: "Ahoy matey! Help Captain Multiply find buried treasure by solving multiplication tables from 1-5. Dig up coins and gems!",
+        instructions: "Click on treasure chests with the correct multiplication answers. Avoid the wrong answers or you'll wake the sea monsters!",
+        educationalBenefits: "Learn multiplication tables 1-5, develop quick recall, understand multiplication concepts",
+        thumbnail: "pirate-treasure-multiplication.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["multiplication", "times-tables", "pirates", "treasure"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 10,
+        maxPlayTime: 18,
+        averageRating: 4.8,
+        learningOutcomes: "Students will master multiplication facts 1-5",
+        curriculumStandards: "Meets Common Core Math Standards 2.OA.A.1",
+        accessibility: "Pirate voice narration, colorful treasure visuals, large click targets"
+      },
+      // 3rd Grade Games
+      {
+        id: 200,
+        title: "AI Robot Builder",
+        slug: "ai-robot-builder",
+        description: "Design and program your own AI robot! Learn basic coding concepts while building amazing robots with different abilities.",
+        instructions: "Drag code blocks to program your robot, test its movements, and complete challenges!",
+        educationalBenefits: "Learn basic programming logic, understand AI concepts, develop problem-solving skills, practice sequential thinking",
+        thumbnail: "ai-robot-builder.jpg",
+        gameType: "react" as const,
+        gradeId: 5, // 3rd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["ai", "programming", "robotics", "logic"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 10,
+        maxPlayTime: 25,
+        averageRating: 4.9,
+        learningOutcomes: "Students will understand basic programming concepts and AI logic",
+        curriculumStandards: "Meets CSTA Computer Science Standards 1A-AP-10",
+        accessibility: "Visual programming blocks, step-by-step tutorials, keyboard shortcuts"
+      }
+    ];
+    
+    gamesData.forEach(game => this.games.set(game.id, game));
+
+    // Add game-subject relationships
+    const gameSubjectsData = [
+      { id: 1, gameId: 21, subjectId: 1 }, // Addition Arcade - Math
+      { id: 2, gameId: 22, subjectId: 1 }, // Subtraction Safari - Math
+      { id: 3, gameId: 23, subjectId: 2 }, // Spelling Bee Garden - Reading
+      { id: 4, gameId: 24, subjectId: 2 }, // Sight Word Memory - Reading
+      { id: 5, gameId: 100, subjectId: 1 }, // Space Math Explorer - Math
+      { id: 6, gameId: 101, subjectId: 1 }, // Pirate Treasure Multiplication - Math
+      { id: 7, gameId: 200, subjectId: 8 }, // AI Robot Builder - Logic
+    ];
+    
+    gameSubjectsData.forEach(gs => this.gameSubjects.set(gs.id, gs));
   }
 }
 
