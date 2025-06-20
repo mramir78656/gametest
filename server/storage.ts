@@ -328,9 +328,91 @@ export class MemStorage implements IStorage {
     
     subjectsData.forEach(subject => this.subjects.set(subject.id, subject));
 
-    // Add sample games for each grade
+    // Add all games from seed database
     const gamesData = [
+      // PreK Games
+      {
+        id: 6,
+        title: "ABC Animals",
+        slug: "abc-animals",
+        description: "Learn the alphabet with cute animal friends! Match letters to animals and hear the sounds they make.",
+        instructions: "Click on the letter that matches the animal shown. Listen to the sound and repeat the letter name.",
+        educationalBenefits: "Learn alphabet recognition, associate letters with animals, develop phonemic awareness, practice letter sounds.",
+        thumbnail: "abc-animals.jpg",
+        gameType: "createjs" as const,
+        gradeId: 1, // PreK
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["alphabet", "animals", "phonics"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 3,
+        maxPlayTime: 8,
+        averageRating: 4.9,
+        learningOutcomes: "Students will recognize letters and associate them with animal names",
+        curriculumStandards: "Meets Common Core Language Standards K.L.1.a",
+        accessibility: "Animal sounds, large letters, simple interface"
+      },
+      
+      // Kindergarten Games
+      {
+        id: 7,
+        title: "Number Garden",
+        slug: "number-garden",
+        description: "Plant and grow numbers in your magical garden! Count objects and learn number recognition from 1-20.",
+        instructions: "Count the flowers or fruits and click on the correct number. Watch your garden grow!",
+        educationalBenefits: "Learn number recognition, practice counting, understand quantity concepts",
+        thumbnail: "number-garden.jpg",
+        gameType: "react" as const,
+        gradeId: 2, // Kindergarten
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["counting", "numbers", "garden"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 12,
+        averageRating: 4.8,
+        learningOutcomes: "Students will count objects and recognize numbers 1-20",
+        curriculumStandards: "Meets Common Core Math Standards K.CC.A.1",
+        accessibility: "Large numbers, bright colors, counting sounds"
+      },
+
       // 1st Grade Games
+      {
+        id: 2,
+        title: "Word Wizards",
+        slug: "word-wizards",
+        description: "Become a Word Wizard by mastering spelling and vocabulary! Cast letter spells to create words and defeat the spelling monsters.",
+        instructions: "Click on letters to spell words. Submit your answers by pressing the magic wand button.",
+        educationalBenefits: "Improve spelling skills, expand vocabulary, practice word recognition, enhance reading comprehension.",
+        thumbnail: "word-wizards.jpg",
+        gameType: "phaser" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["spelling", "vocabulary", "reading"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 10,
+        averageRating: 4.8,
+        learningOutcomes: "Students will improve spelling skills and build vocabulary",
+        curriculumStandards: "Meets Common Core Language Standards 1.L.2, 1.L.4",
+        accessibility: "Keyboard controls, text-to-speech, high contrast mode"
+      },
       {
         id: 21,
         title: "Addition Arcade",
@@ -435,7 +517,216 @@ export class MemStorage implements IStorage {
         curriculumStandards: "Meets Common Core Reading Standards 1.RF.3.g",
         accessibility: "Keyboard navigation, high contrast mode"
       },
+      {
+        id: 25,
+        title: "Rhyming Rockets",
+        slug: "rhyming-rockets",
+        description: "Launch rockets by finding rhyming words! Space-themed phonics adventure for young learners.",
+        instructions: "Find words that rhyme with the target word to launch rockets into space!",
+        educationalBenefits: "Develop phonics skills, learn rhyming patterns, improve word recognition",
+        thumbnail: "rhyming-rockets.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["rhyming", "phonics", "reading"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 12,
+        averageRating: 4.9,
+        learningOutcomes: "Students will identify rhyming words and understand sound patterns",
+        curriculumStandards: "Meets Common Core Reading Standards 1.RF.2.a",
+        accessibility: "Audio support, space-themed visuals"
+      },
+      {
+        id: 26,
+        title: "Telling Time Puzzle",
+        slug: "telling-time-puzzle",
+        description: "Learn to read analog clocks with colorful time puzzles! Practice telling time to the hour and half hour.",
+        instructions: "Look at the clock and choose the correct time. Learn about hour and minute hands!",
+        educationalBenefits: "Learn time concepts, practice reading clocks, understand daily schedules",
+        thumbnail: "telling-time-puzzle.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["time", "math", "clocks"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 15,
+        averageRating: 4.7,
+        learningOutcomes: "Students will read analog clocks to the hour and half hour",
+        curriculumStandards: "Meets Common Core Math Standards 1.MD.B.3",
+        accessibility: "Large clock faces, clear time indicators"
+      },
+      {
+        id: 27,
+        title: "Animal Habitat Match",
+        slug: "animal-habitat-match",
+        description: "Help animals find their homes! Learn about different habitats where animals live around the world.",
+        instructions: "Match each animal to its correct habitat. Learn where different animals live!",
+        educationalBenefits: "Learn about animal habitats, develop classification skills, understand ecosystems",
+        thumbnail: "animal-habitat-match.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["science", "animals", "habitats"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 12,
+        averageRating: 4.8,
+        learningOutcomes: "Students will identify animal habitats and understand ecosystems",
+        curriculumStandards: "Meets Next Generation Science Standards K-LS1-1",
+        accessibility: "Visual habitat representations, animal sounds"
+      },
+      {
+        id: 28,
+        title: "Life Cycle Sort",
+        slug: "life-cycle-sort",
+        description: "Put life cycle stages in correct order! Learn how butterflies, frogs, and chickens grow and change.",
+        instructions: "Drag the life cycle stages into the correct order from first to last!",
+        educationalBenefits: "Understand life cycles, learn sequence and order, develop scientific thinking",
+        thumbnail: "life-cycle-sort.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["science", "life-cycles", "biology"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 8,
+        maxPlayTime: 15,
+        averageRating: 4.7,
+        learningOutcomes: "Students will understand basic life cycles of common animals",
+        curriculumStandards: "Meets Next Generation Science Standards 1-LS1-2",
+        accessibility: "Drag and drop alternative, clear stage progression"
+      },
+      {
+        id: 29,
+        title: "Shapes & Geometry",
+        slug: "shapes-geometry",
+        description: "Identify shapes and learn geometry basics! Practice recognizing circles, triangles, squares, and rectangles.",
+        instructions: "Look at each shape and choose its correct name. Learn about different geometric shapes!",
+        educationalBenefits: "Recognize geometric shapes, develop spatial awareness, learn shape properties",
+        thumbnail: "shapes-geometry.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["math", "geometry", "shapes"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 12,
+        averageRating: 4.8,
+        learningOutcomes: "Students will identify and name basic geometric shapes",
+        curriculumStandards: "Meets Common Core Math Standards 1.G.A.1",
+        accessibility: "High contrast shapes, shape tracing options"
+      },
+      {
+        id: 30,
+        title: "Vowel Sorting",
+        slug: "vowel-sorting",
+        description: "Learn short and long vowel sounds! Listen to words and identify if they have short or long vowels.",
+        instructions: "Listen to each word and decide if it has a short or long vowel sound!",
+        educationalBenefits: "Distinguish vowel sounds, improve phonics skills, enhance reading ability",
+        thumbnail: "vowel-sorting.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["phonics", "vowels", "reading"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 12,
+        averageRating: 4.9,
+        learningOutcomes: "Students will distinguish between short and long vowel sounds",
+        curriculumStandards: "Meets Common Core Reading Standards 1.RF.2.a",
+        accessibility: "Clear audio pronunciation, visual vowel guides"
+      },
+      {
+        id: 31,
+        title: "Patterns & Sequences",
+        slug: "patterns-sequences",
+        description: "Find what comes next in colorful patterns! Develop logical thinking with shapes, colors, and objects.",
+        instructions: "Look at the pattern and choose what comes next. Find the repeating sequence!",
+        educationalBenefits: "Develop pattern recognition, logical thinking, mathematical reasoning",
+        thumbnail: "patterns-sequences.jpg",
+        gameType: "react" as const,
+        gradeId: 3, // 1st Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["logic", "patterns", "math"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 15,
+        averageRating: 4.8,
+        learningOutcomes: "Students will recognize and continue simple patterns",
+        curriculumStandards: "Meets Common Core Math Standards 1.OA.D.8",
+        accessibility: "Clear pattern visualization, step-by-step hints"
+      },
+
       // 2nd Grade Games
+      {
+        id: 4,
+        title: "Typing Adventure",
+        slug: "typing-adventure",
+        description: "Race through the forest by typing words correctly! Improve your typing speed and accuracy while having fun.",
+        instructions: "Type the words that appear on the screen as quickly and accurately as possible to move your character forward.",
+        educationalBenefits: "Develop typing skills, improve keyboard familiarity, enhance finger placement, increase typing speed and accuracy.",
+        thumbnail: "typing-adventure.jpg",
+        gameType: "createjs" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["typing", "keyboard-skills", "speed"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 15,
+        averageRating: 4.5,
+        learningOutcomes: "Students will improve typing speed and accuracy",
+        curriculumStandards: "Meets ISTE Standards for Students 1.1.c, 1.1.d",
+        accessibility: "High contrast mode, adjustable speed settings"
+      },
       {
         id: 100,
         title: "Space Math Explorer",
@@ -488,7 +779,242 @@ export class MemStorage implements IStorage {
         curriculumStandards: "Meets Common Core Math Standards 2.OA.A.1",
         accessibility: "Pirate voice narration, colorful treasure visuals, large click targets"
       },
+      {
+        id: 102,
+        title: "Grammar Castle Adventure",
+        slug: "grammar-castle-adventure",
+        description: "Enter the magical Grammar Castle and help the wizard sort nouns, verbs, and adjectives! Each correct answer unlocks a new room.",
+        instructions: "Drag words into the correct grammar category bins. Complete each room to advance through the castle!",
+        educationalBenefits: "Identify parts of speech, understand grammar fundamentals, build vocabulary",
+        thumbnail: "grammar-castle-adventure.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["grammar", "nouns", "verbs", "adjectives", "castle"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 12,
+        maxPlayTime: 20,
+        averageRating: 4.7,
+        learningOutcomes: "Students will identify and categorize basic parts of speech",
+        curriculumStandards: "Meets Common Core Language Standards 2.L.1.a",
+        accessibility: "Wizard voice guidance, magical sound effects, clear category labels"
+      },
+      {
+        id: 103,
+        title: "Dinosaur Fossil Fractions",
+        slug: "dinosaur-fossil-fractions",
+        description: "Become a paleontologist and dig up dinosaur fossils! Learn about halves, thirds, and fourths while uncovering T-Rex bones.",
+        instructions: "Look at the fossil pieces and identify what fraction of the dinosaur skeleton you've found. Match fractions to complete dinosaurs!",
+        educationalBenefits: "Understand basic fractions, recognize equal parts, develop visual fraction skills",
+        thumbnail: "dinosaur-fossil-fractions.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["fractions", "dinosaurs", "fossils", "halves", "thirds"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 8,
+        maxPlayTime: 15,
+        averageRating: 4.9,
+        learningOutcomes: "Students will identify and represent halves, thirds, and fourths",
+        curriculumStandards: "Meets Common Core Math Standards 2.G.A.3",
+        accessibility: "Dinosaur roar sound effects, clear fraction visualizations, dig animation"
+      },
+      {
+        id: 104,
+        title: "Superhero Sight Words",
+        slug: "superhero-sight-words",
+        description: "Join the Sight Word Squad and save the city! Read sight words quickly to power up your superhero abilities and defeat villains.",
+        instructions: "Read the sight word on screen and click the matching word from the options. Speed and accuracy give you more superhero power!",
+        educationalBenefits: "Master 2nd grade sight words, improve reading fluency, develop automatic word recognition",
+        thumbnail: "superhero-sight-words.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["sight-words", "reading", "fluency", "superhero"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 10,
+        maxPlayTime: 16,
+        averageRating: 4.8,
+        learningOutcomes: "Students will recognize 2nd grade sight words automatically",
+        curriculumStandards: "Meets Common Core Reading Standards 2.RF.3.f",
+        accessibility: "Superhero sound effects, high contrast text, word pronunciation"
+      },
+      {
+        id: 105,
+        title: "Pizza Place Money Math",
+        slug: "pizza-place-money-math",
+        description: "Run your own pizza restaurant! Count coins and dollars to make correct change for hungry customers. Learn money values while having fun!",
+        instructions: "Look at what customers order, add up the total cost, and give the correct change using coins and bills!",
+        educationalBenefits: "Learn coin and bill values, practice addition with money, understand making change",
+        thumbnail: "pizza-place-money-math.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["money", "coins", "addition", "restaurant", "pizza"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 12,
+        maxPlayTime: 20,
+        averageRating: 4.7,
+        learningOutcomes: "Students will identify coin values and solve money problems",
+        curriculumStandards: "Meets Common Core Math Standards 2.MD.C.8",
+        accessibility: "Cash register sounds, clear money visuals, customer voice orders"
+      },
+      {
+        id: 106,
+        title: "Jungle Time Adventure",
+        slug: "jungle-time-adventure",
+        description: "Swing through the jungle with Timmy the Monkey! Learn to tell time to the hour and half-hour while exploring the rainforest.",
+        instructions: "Help Timmy reach different jungle locations at the right time. Read the clocks and choose the correct time!",
+        educationalBenefits: "Tell time to hour and half-hour, understand clock faces, develop time awareness",
+        thumbnail: "jungle-time-adventure.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["time", "clocks", "jungle", "monkey", "hour"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 8,
+        maxPlayTime: 14,
+        averageRating: 4.8,
+        learningOutcomes: "Students will tell time to the hour and half-hour",
+        curriculumStandards: "Meets Common Core Math Standards 2.MD.C.7",
+        accessibility: "Jungle animal sounds, large clock displays, monkey voice guide"
+      },
+      {
+        id: 107,
+        title: "Robot Reading Comprehension",
+        slug: "robot-reading-comprehension",
+        description: "Program your robot buddy by reading short stories and answering questions! Help the robot understand what it reads to complete missions.",
+        instructions: "Read the story carefully, then answer questions about characters, setting, and what happened. Correct answers power up your robot!",
+        educationalBenefits: "Improve reading comprehension, identify main ideas, understand story elements",
+        thumbnail: "robot-reading-comprehension.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["reading", "comprehension", "stories", "robot", "questions"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 15,
+        maxPlayTime: 25,
+        averageRating: 4.9,
+        learningOutcomes: "Students will demonstrate reading comprehension of grade-level texts",
+        curriculumStandards: "Meets Common Core Reading Standards 2.RL.1-3",
+        accessibility: "Robot voice narration, story illustrations, clear question text"
+      },
+      {
+        id: 108,
+        title: "Butterfly Garden Shapes",
+        slug: "butterfly-garden-shapes",
+        description: "Create a beautiful butterfly garden by identifying 2D and 3D shapes! Match shapes to grow flowers and attract colorful butterflies.",
+        instructions: "Look at the shape shown and click on all matching shapes in the garden. Watch butterflies appear as you complete each level!",
+        educationalBenefits: "Identify 2D and 3D shapes, understand shape properties, develop spatial reasoning",
+        thumbnail: "butterfly-garden-shapes.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "easy" as const,
+        tags: ["shapes", "geometry", "2D", "3D", "butterflies", "garden"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 10,
+        maxPlayTime: 16,
+        averageRating: 4.8,
+        learningOutcomes: "Students will identify and describe 2D and 3D shapes",
+        curriculumStandards: "Meets Common Core Math Standards 2.G.A.1",
+        accessibility: "Butterfly flutter sounds, nature background music, shape name pronunciation"
+      },
+      {
+        id: 109,
+        title: "Magical Measuring Wizard",
+        slug: "magical-measuring-wizard",
+        description: "Become a measuring wizard and help magical creatures! Use rulers, measuring cups, and scales to solve measurement problems and brew potions.",
+        instructions: "Use the measuring tools to find the length, weight, or volume needed for each magic spell. Choose the correct measurement unit!",
+        educationalBenefits: "Learn measurement units, use measuring tools, understand length, weight, and volume",
+        thumbnail: "magical-measuring-wizard.jpg",
+        gameType: "react" as const,
+        gradeId: 4, // 2nd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["measurement", "rulers", "units", "wizard", "magic", "tools"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 12,
+        maxPlayTime: 18,
+        averageRating: 4.7,
+        learningOutcomes: "Students will measure length, weight, and volume using standard units",
+        curriculumStandards: "Meets Common Core Math Standards 2.MD.A.1-4",
+        accessibility: "Magical spell sounds, clear measuring tool visuals, wizard voice guidance"
+      },
+
       // 3rd Grade Games
+      {
+        id: 1,
+        title: "Math Adventure",
+        slug: "math-adventure",
+        description: "Join Captain Matheo on an exciting adventure through Number Island! Solve addition, subtraction, multiplication and division puzzles to unlock treasures and defeat the Math Monster.",
+        instructions: "Use your mouse or touchscreen to select answers. Arrow keys can be used for movement on desktop.",
+        educationalBenefits: "Practice basic arithmetic operations, develop mental math skills, learn problem-solving strategies, build math confidence through gameplay.",
+        thumbnail: "math-adventure.jpg",
+        gameType: "phaser" as const,
+        gradeId: 5, // 3rd Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["addition", "subtraction", "multiplication", "division"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 5,
+        maxPlayTime: 15,
+        averageRating: 4.7,
+        learningOutcomes: "Students will practice basic arithmetic and develop quick mental calculation skills",
+        curriculumStandards: "Meets Common Core Math Standards 3.OA.A.1, 3.OA.B.5",
+        accessibility: "Keyboard controls, text-to-speech, high contrast mode"
+      },
       {
         id: 200,
         title: "AI Robot Builder",
@@ -514,6 +1040,60 @@ export class MemStorage implements IStorage {
         learningOutcomes: "Students will understand basic programming concepts and AI logic",
         curriculumStandards: "Meets CSTA Computer Science Standards 1A-AP-10",
         accessibility: "Visual programming blocks, step-by-step tutorials, keyboard shortcuts"
+      },
+
+      // 4th Grade Games
+      {
+        id: 3,
+        title: "Science Lab",
+        slug: "science-lab",
+        description: "Conduct virtual experiments in your own Science Lab! Mix chemicals, observe reactions, and learn scientific concepts through hands-on activities.",
+        instructions: "Drag and drop elements to combine them. Use tools from your toolkit to measure and analyze results.",
+        educationalBenefits: "Learn scientific method, understand basic chemistry concepts, develop critical thinking skills, practice observation and analysis.",
+        thumbnail: "science-lab.jpg",
+        gameType: "phaser" as const,
+        gradeId: 6, // 4th Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "hard" as const,
+        tags: ["experiments", "chemistry", "scientific-method"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 10,
+        maxPlayTime: 20,
+        averageRating: 4.6,
+        learningOutcomes: "Students will understand the scientific method and basic chemistry principles",
+        curriculumStandards: "Meets Next Generation Science Standards 4-PS3-2, 4-PS3-4",
+        accessibility: "Keyboard controls, text-to-speech, high contrast mode"
+      },
+      {
+        id: 5,
+        title: "Geography Explorer",
+        slug: "geography-explorer",
+        description: "Travel the world as a Geography Explorer! Visit different countries, learn about landmarks, and discover diverse cultures.",
+        instructions: "Click on the map to answer geography questions. Collect stamps in your passport for correct answers.",
+        educationalBenefits: "Learn world geography, understand cultural diversity, improve map reading skills, memorize countries and capitals.",
+        thumbnail: "geography-explorer.jpg",
+        gameType: "phaser" as const,
+        gradeId: 6, // 4th Grade
+        isPremium: false,
+        isActive: true,
+        difficulty: "medium" as const,
+        tags: ["geography", "countries", "maps", "cultures"],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        hasTextToSpeech: true,
+        hasHighContrastMode: true,
+        hasKeyboardControls: true,
+        minPlayTime: 10,
+        maxPlayTime: 20,
+        averageRating: 4.9,
+        learningOutcomes: "Students will learn geography and cultural diversity",
+        curriculumStandards: "Meets Social Studies Standards SS.4.G.1, SS.4.G.2",
+        accessibility: "Keyboard controls, text-to-speech, high contrast mode"
       }
     ];
     
@@ -521,13 +1101,46 @@ export class MemStorage implements IStorage {
 
     // Add game-subject relationships
     const gameSubjectsData = [
-      { id: 1, gameId: 21, subjectId: 1 }, // Addition Arcade - Math
-      { id: 2, gameId: 22, subjectId: 1 }, // Subtraction Safari - Math
-      { id: 3, gameId: 23, subjectId: 2 }, // Spelling Bee Garden - Reading
-      { id: 4, gameId: 24, subjectId: 2 }, // Sight Word Memory - Reading
-      { id: 5, gameId: 100, subjectId: 1 }, // Space Math Explorer - Math
-      { id: 6, gameId: 101, subjectId: 1 }, // Pirate Treasure Multiplication - Math
-      { id: 7, gameId: 200, subjectId: 8 }, // AI Robot Builder - Logic
+      // PreK Games
+      { id: 1, gameId: 6, subjectId: 2 }, // ABC Animals - Reading
+      
+      // Kindergarten Games
+      { id: 2, gameId: 7, subjectId: 1 }, // Number Garden - Math
+      
+      // 1st Grade Games
+      { id: 3, gameId: 2, subjectId: 2 }, // Word Wizards - Reading
+      { id: 4, gameId: 21, subjectId: 1 }, // Addition Arcade - Math
+      { id: 5, gameId: 22, subjectId: 1 }, // Subtraction Safari - Math
+      { id: 6, gameId: 23, subjectId: 2 }, // Spelling Bee Garden - Reading
+      { id: 7, gameId: 24, subjectId: 2 }, // Sight Word Memory - Reading
+      { id: 8, gameId: 25, subjectId: 2 }, // Rhyming Rockets - Reading
+      { id: 9, gameId: 26, subjectId: 1 }, // Telling Time Puzzle - Math
+      { id: 10, gameId: 27, subjectId: 3 }, // Animal Habitat Match - Science
+      { id: 11, gameId: 28, subjectId: 3 }, // Life Cycle Sort - Science
+      { id: 12, gameId: 29, subjectId: 1 }, // Shapes & Geometry - Math
+      { id: 13, gameId: 30, subjectId: 2 }, // Vowel Sorting - Reading
+      { id: 14, gameId: 31, subjectId: 8 }, // Patterns & Sequences - Logic
+      
+      // 2nd Grade Games
+      { id: 15, gameId: 4, subjectId: 7 }, // Typing Adventure - Typing
+      { id: 16, gameId: 100, subjectId: 1 }, // Space Math Explorer - Math
+      { id: 17, gameId: 101, subjectId: 1 }, // Pirate Treasure Multiplication - Math
+      { id: 18, gameId: 102, subjectId: 2 }, // Grammar Castle Adventure - Reading
+      { id: 19, gameId: 103, subjectId: 1 }, // Dinosaur Fossil Fractions - Math
+      { id: 20, gameId: 104, subjectId: 2 }, // Superhero Sight Words - Reading
+      { id: 21, gameId: 105, subjectId: 1 }, // Pizza Place Money Math - Math
+      { id: 22, gameId: 106, subjectId: 1 }, // Jungle Time Adventure - Math
+      { id: 23, gameId: 107, subjectId: 2 }, // Robot Reading Comprehension - Reading
+      { id: 24, gameId: 108, subjectId: 1 }, // Butterfly Garden Shapes - Math
+      { id: 25, gameId: 109, subjectId: 1 }, // Magical Measuring Wizard - Math
+      
+      // 3rd Grade Games
+      { id: 26, gameId: 1, subjectId: 1 }, // Math Adventure - Math
+      { id: 27, gameId: 200, subjectId: 8 }, // AI Robot Builder - Logic
+      
+      // 4th Grade Games
+      { id: 28, gameId: 3, subjectId: 3 }, // Science Lab - Science
+      { id: 29, gameId: 5, subjectId: 4 }, // Geography Explorer - Social Studies
     ];
     
     gameSubjectsData.forEach(gs => this.gameSubjects.set(gs.id, gs));
