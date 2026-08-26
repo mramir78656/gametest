@@ -103,7 +103,7 @@ export class MemStorage implements IStorage {
   
   // Game methods
   async getGames(): Promise<Game[]> {
-    return Array.from(this.games.values());
+    return Array.from(this.games.values()).filter((game) => game.isActive);
   }
   
   async getGameById(id: number): Promise<Game | undefined> {
@@ -118,13 +118,13 @@ export class MemStorage implements IStorage {
   
   async getGamesByGradeId(gradeId: number): Promise<Game[]> {
     return Array.from(this.games.values()).filter(
-      (game) => game.gradeId === gradeId
+      (game) => game.gradeId === gradeId && game.isActive
     );
   }
   
   async getFeaturedGames(limit: number = 5): Promise<Game[]> {
-    // For demo, just return first N games as featured
-    return Array.from(this.games.values()).slice(0, limit);
+    // For demo, just return first N active games as featured
+    return Array.from(this.games.values()).filter((game) => game.isActive).slice(0, limit);
   }
   
   async createGame(insertGame: InsertGame): Promise<Game> {
@@ -342,7 +342,7 @@ export class MemStorage implements IStorage {
         gameType: "createjs" as const,
         gradeId: 1, // PreK
         isPremium: false,
-        isActive: true,
+        isActive: false,
         difficulty: "easy" as const,
         tags: ["alphabet", "animals", "phonics"],
         createdAt: new Date(),
@@ -868,7 +868,7 @@ export class MemStorage implements IStorage {
         gameType: "react" as const,
         gradeId: 4, // 2nd Grade
         isPremium: false,
-        isActive: true,
+        isActive: false,
         difficulty: "medium" as const,
         tags: ["money", "coins", "addition", "restaurant", "pizza"],
         createdAt: new Date(),
@@ -894,7 +894,7 @@ export class MemStorage implements IStorage {
         gameType: "react" as const,
         gradeId: 4, // 2nd Grade
         isPremium: false,
-        isActive: true,
+        isActive: false,
         difficulty: "easy" as const,
         tags: ["time", "clocks", "jungle", "monkey", "hour"],
         createdAt: new Date(),
@@ -920,7 +920,7 @@ export class MemStorage implements IStorage {
         gameType: "react" as const,
         gradeId: 4, // 2nd Grade
         isPremium: false,
-        isActive: true,
+        isActive: false,
         difficulty: "medium" as const,
         tags: ["reading", "comprehension", "stories", "robot", "questions"],
         createdAt: new Date(),
@@ -946,7 +946,7 @@ export class MemStorage implements IStorage {
         gameType: "react" as const,
         gradeId: 4, // 2nd Grade
         isPremium: false,
-        isActive: true,
+        isActive: false,
         difficulty: "easy" as const,
         tags: ["shapes", "geometry", "2D", "3D", "butterflies", "garden"],
         createdAt: new Date(),
@@ -972,7 +972,7 @@ export class MemStorage implements IStorage {
         gameType: "react" as const,
         gradeId: 4, // 2nd Grade
         isPremium: false,
-        isActive: true,
+        isActive: false,
         difficulty: "medium" as const,
         tags: ["measurement", "rulers", "units", "wizard", "magic", "tools"],
         createdAt: new Date(),

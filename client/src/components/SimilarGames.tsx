@@ -14,9 +14,9 @@ const SimilarGames = ({ currentGameId, gradeId }: SimilarGamesProps) => {
     queryKey: [API.GAMES_BY_GRADE(gradeId)],
   });
   
-  // Filter out the current game and limit to 3 similar games
+  // Filter out the current game, inactive games, and limit to 3 similar games
   const similarGames = games
-    ?.filter(game => game.id !== currentGameId)
+    ?.filter(game => game.id !== currentGameId && game.isActive !== false)
     .slice(0, 3);
   
   if (isLoading) {

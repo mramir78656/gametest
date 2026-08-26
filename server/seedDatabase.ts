@@ -1,4 +1,5 @@
 import { db } from './db';
+import { inArray } from 'drizzle-orm';
 import {
   users,
   grades,
@@ -734,7 +735,7 @@ async function seedDatabase() {
       gameType: "react",
       gradeId: 4, // 2nd Grade
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "medium",
       tags: ["money", "coins", "addition", "restaurant", "pizza"],
       createdAt: new Date(),
@@ -760,7 +761,7 @@ async function seedDatabase() {
       gameType: "react",
       gradeId: 4, // 2nd Grade
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "easy",
       tags: ["time", "clocks", "jungle", "monkey", "hour"],
       createdAt: new Date(),
@@ -786,7 +787,7 @@ async function seedDatabase() {
       gameType: "react",
       gradeId: 4, // 2nd Grade
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "medium",
       tags: ["reading", "comprehension", "stories", "robot", "questions"],
       createdAt: new Date(),
@@ -812,7 +813,7 @@ async function seedDatabase() {
       gameType: "react",
       gradeId: 4, // 2nd Grade
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "easy",
       tags: ["shapes", "geometry", "2D", "3D", "butterflies", "garden"],
       createdAt: new Date(),
@@ -838,7 +839,7 @@ async function seedDatabase() {
       gameType: "react",
       gradeId: 4, // 2nd Grade
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "medium",
       tags: ["measurement", "rulers", "units", "wizard", "magic", "tools"],
       createdAt: new Date(),
@@ -995,7 +996,7 @@ async function seedDatabase() {
       gameType: "createjs",
       gradeId: 1, // PreK
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "easy",
       tags: ["alphabet", "animals", "phonics"],
       createdAt: new Date(),
@@ -1021,7 +1022,7 @@ async function seedDatabase() {
       gameType: "phaser",
       gradeId: 1, // PreK
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "easy",
       tags: ["counting", "numbers", "addition"],
       createdAt: new Date(),
@@ -1047,7 +1048,7 @@ async function seedDatabase() {
       gameType: "createjs",
       gradeId: 1, // PreK
       isPremium: true,
-      isActive: true,
+      isActive: false,
       difficulty: "easy",
       tags: ["shapes", "geometry", "matching"],
       createdAt: new Date(),
@@ -1073,7 +1074,7 @@ async function seedDatabase() {
       gameType: "phaser",
       gradeId: 1, // PreK
       isPremium: false,
-      isActive: true,
+      isActive: false,
       difficulty: "easy",
       tags: ["colors", "painting", "creativity"],
       createdAt: new Date(),
@@ -1222,6 +1223,23 @@ async function seedDatabase() {
   ];
 
   await db.insert(games).values(gamesData).onConflictDoNothing();
+
+  // Ensure unbuilt placeholder games stay hidden even if they were seeded earlier
+  const inactivePlaceholderSlugs = [
+    'pizza-place-money-math',
+    'jungle-time-adventure',
+    'robot-reading-comprehension',
+    'butterfly-garden-shapes',
+    'magical-measuring-wizard',
+    'abc-animals',
+    'counting-fun',
+    'shape-match',
+    'color-world',
+  ];
+  await db
+    .update(games)
+    .set({ isActive: false, updatedAt: new Date() })
+    .where(inArray(games.slug, inactivePlaceholderSlugs));
 
   // Add game subjects
   console.log('Seeding game subjects...');

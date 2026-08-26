@@ -10,6 +10,11 @@ interface GameCardProps {
 }
 
 const GameCard = ({ game, grades = GRADES, showGrade = true }: GameCardProps) => {
+  // Don't render cards for unbuilt / deactivated games
+  if (game.isActive === false) {
+    return null;
+  }
+
   // Find grade info
   const grade = grades.find(g => g.id === game.gradeId) || 
     GRADES.find(g => g.id === game.gradeId) || 
