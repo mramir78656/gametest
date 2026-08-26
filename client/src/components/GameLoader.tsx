@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect, type ComponentType } from 'react';
 
 // Define interface for the game loader props
 interface GameLoaderProps {
@@ -8,7 +8,10 @@ interface GameLoaderProps {
 }
 
 const GameLoader = ({ gameSlug, isMuted, onScoreUpdate }: GameLoaderProps) => {
-  const [Component, setComponent] = useState<React.ComponentType | null>(null);
+  const [Component, setComponent] = useState<ComponentType<{
+    isMuted?: boolean;
+    onScoreUpdate?: (score: number) => void;
+  }> | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,6 +35,21 @@ const GameLoader = ({ gameSlug, isMuted, onScoreUpdate }: GameLoaderProps) => {
             break;
           case 'superhero-sight-words':
             module = await import('../games/SuperheroSightWords');
+            break;
+          case 'number-ninja-slice':
+            module = await import('../games/NumberNinjaSlice/index.tsx');
+            break;
+          case 'phonics-pet-parade':
+            module = await import('../games/PhonicsPetParade/index.tsx');
+            break;
+          case 'fraction-pizza-party':
+            module = await import('../games/FractionPizzaParty/index.tsx');
+            break;
+          case 'word-builder-robot':
+            module = await import('../games/WordBuilderRobot/index.tsx');
+            break;
+          case 'science-bubble-sort':
+            module = await import('../games/ScienceBubbleSort/index.tsx');
             break;
           default:
             // Try to load from games folder with PascalCase naming
@@ -100,9 +118,11 @@ const GameLoader = ({ gameSlug, isMuted, onScoreUpdate }: GameLoaderProps) => {
     );
   }
 
+  const GameComponent = Component;
+
   return (
     <div className="w-full h-full">
-      <Component />
+      <GameComponent isMuted={isMuted} onScoreUpdate={onScoreUpdate} />
     </div>
   );
 };
