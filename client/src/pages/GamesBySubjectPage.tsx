@@ -38,13 +38,14 @@ const GamesBySubjectPage = () => {
     { id: 'general-knowledge', name: 'General Knowledge', icon: '🌍' }
   ];
 
-  // Filter games based on selected subject
+  // Filter games based on selected subject (active games only)
   useEffect(() => {
+    const activeGames = games.filter(game => game.isActive !== false);
     if (activeSubject === 'all') {
-      setFilteredGames(games);
+      setFilteredGames(activeGames);
     } else {
       // Filter games based on subject name matching
-      const filtered = games.filter(game => 
+      const filtered = activeGames.filter(game => 
         game.title.toLowerCase().includes(activeSubject) ||
         game.description?.toLowerCase().includes(activeSubject)
       );
@@ -75,15 +76,15 @@ const GamesBySubjectPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
-        <title>Games by Subject | Educational Gaming Platform</title>
-        <meta name="description" content="Explore educational games organized by subject including Math, English, Science, and more." />
+        <title>All Games | Educational Gaming Platform</title>
+        <meta name="description" content="Browse all active educational games, or filter by subject including Math, English, Science, and more." />
       </Helmet>
 
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Games by Subject</h1>
-          <p className="text-lg text-gray-600">Discover educational games organized by subject area</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">All Games</h1>
+          <p className="text-lg text-gray-600">Discover educational games — browse all or filter by subject</p>
         </div>
 
         {/* Subject Filter Buttons */}
