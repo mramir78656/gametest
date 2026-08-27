@@ -1,4 +1,5 @@
 import { db } from './db';
+import { inArray } from 'drizzle-orm';
 import {
   users,
   grades,
@@ -853,9 +854,157 @@ async function seedDatabase() {
       curriculumStandards: "Meets Social Studies Standards SS.4.G.1, SS.4.G.2",
       accessibility: "Keyboard controls, text-to-speech, high contrast mode"
     },
+    // Batch 1 — new interactive games (append only)
+    {
+      id: 300,
+      title: "Number Ninja Slice",
+      slug: "number-ninja-slice",
+      description: "Slice falling numbers that complete addition and subtraction equations in this ninja-themed math challenge!",
+      instructions: "Read the equation, then click (slice) the falling number that completes it. Avoid the wrong numbers!",
+      educationalBenefits: "Practice addition and subtraction facts, build number sense, improve visual attention",
+      thumbnail: "number-ninja-slice.jpg",
+      gameType: "react",
+      gradeId: 3, // 1st Grade (also great for grade 2)
+      isPremium: false,
+      isActive: true,
+      difficulty: "easy",
+      tags: ["addition", "subtraction", "math", "ninja"],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      hasTextToSpeech: false,
+      hasHighContrastMode: true,
+      hasKeyboardControls: false,
+      minPlayTime: 5,
+      maxPlayTime: 12,
+      averageRating: 4.8,
+      learningOutcomes: "Students will solve basic addition and subtraction equations within 20",
+      curriculumStandards: "Meets Common Core Math Standards 1.OA.C.6, 2.OA.B.2",
+      accessibility: "Large tap targets, high contrast falling numbers"
+    },
+    {
+      id: 301,
+      title: "Phonics Pet Parade",
+      slug: "phonics-pet-parade",
+      description: "Animals march across the screen — listen to the letter sound and tap the matching pet!",
+      instructions: "Hear the letter sound, then click the marching animal that matches. Replay the sound anytime.",
+      educationalBenefits: "Letter-sound correspondence, phonemic awareness, listening skills",
+      thumbnail: "phonics-pet-parade.jpg",
+      gameType: "react",
+      gradeId: 1, // PreK (also Kindergarten)
+      isPremium: false,
+      isActive: true,
+      difficulty: "easy",
+      tags: ["phonics", "letters", "reading", "animals"],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      hasTextToSpeech: true,
+      hasHighContrastMode: true,
+      hasKeyboardControls: false,
+      minPlayTime: 5,
+      maxPlayTime: 10,
+      averageRating: 4.9,
+      learningOutcomes: "Students will match beginning letter sounds to letters",
+      curriculumStandards: "Meets Foundational Skills Standards RF.K.3.A",
+      accessibility: "Audio letter cues, large animal buttons"
+    },
+    {
+      id: 302,
+      title: "Fraction Pizza Party",
+      slug: "fraction-pizza-party",
+      description: "Build pizzas by dragging fraction slices to match the target fraction — a tasty way to learn parts of a whole!",
+      instructions: "Look at the fraction goal, then drag or tap slices onto the pizza until it matches.",
+      educationalBenefits: "Understand fractions as parts of a whole, compare simple fractions, fine motor practice",
+      thumbnail: "fraction-pizza-party.jpg",
+      gameType: "react",
+      gradeId: 4, // 2nd Grade (also grade 3)
+      isPremium: false,
+      isActive: true,
+      difficulty: "medium",
+      tags: ["fractions", "math", "pizza", "parts-of-a-whole"],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      hasTextToSpeech: false,
+      hasHighContrastMode: true,
+      hasKeyboardControls: false,
+      minPlayTime: 5,
+      maxPlayTime: 15,
+      averageRating: 4.7,
+      learningOutcomes: "Students will build and recognize unit and simple fractions like 1/2, 1/3, 3/4",
+      curriculumStandards: "Meets Common Core Math Standards 3.NF.A.1, 2.G.A.3",
+      accessibility: "Drag and tap alternatives, high contrast slices"
+    },
+    {
+      id: 303,
+      title: "Word Builder Robot",
+      slug: "word-builder-robot",
+      description: "Help a robot arm assemble letters to spell simple words — drag-and-drop spelling with a mechanical twist!",
+      instructions: "Tap letters in order to build the secret word. The robot arm places each letter for you.",
+      educationalBenefits: "Spelling practice, letter sequencing, CVC word building",
+      thumbnail: "word-builder-robot.jpg",
+      gameType: "react",
+      gradeId: 3, // 1st Grade (also grade 2)
+      isPremium: false,
+      isActive: true,
+      difficulty: "easy",
+      tags: ["spelling", "english", "words", "robot"],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      hasTextToSpeech: false,
+      hasHighContrastMode: true,
+      hasKeyboardControls: false,
+      minPlayTime: 5,
+      maxPlayTime: 12,
+      averageRating: 4.8,
+      learningOutcomes: "Students will spell common CVC words by sequencing letters",
+      curriculumStandards: "Meets Foundational Skills Standards RF.1.3, L.1.2",
+      accessibility: "Large letter tiles, visual robot feedback"
+    },
+    {
+      id: 304,
+      title: "Science Bubble Sort",
+      slug: "science-bubble-sort",
+      description: "Sort floating bubbles into Living or Non-living bins — watch them pop when you sort correctly!",
+      instructions: "Drag (or tap then choose a bin) each bubble into Living or Non-living. Correct sorts pop with a splash!",
+      educationalBenefits: "Classification skills, living vs non-living concepts, early science vocabulary",
+      thumbnail: "science-bubble-sort.jpg",
+      gameType: "react",
+      gradeId: 2, // Kindergarten (also grade 1)
+      isPremium: false,
+      isActive: true,
+      difficulty: "easy",
+      tags: ["science", "classification", "sorting", "living"],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      hasTextToSpeech: false,
+      hasHighContrastMode: true,
+      hasKeyboardControls: false,
+      minPlayTime: 5,
+      maxPlayTime: 10,
+      averageRating: 4.8,
+      learningOutcomes: "Students will classify everyday objects as living or non-living",
+      curriculumStandards: "Meets NGSS K-LS1-1 related classification practices",
+      accessibility: "Drag and tap sorting, large bins"
+    }
   ];
 
   await db.insert(games).values(gamesData).onConflictDoNothing();
+
+  // Ensure unbuilt placeholder games stay hidden even if they were seeded earlier
+  const inactivePlaceholderSlugs = [
+    'pizza-place-money-math',
+    'jungle-time-adventure',
+    'robot-reading-comprehension',
+    'butterfly-garden-shapes',
+    'magical-measuring-wizard',
+    'abc-animals',
+    'counting-fun',
+    'shape-match',
+    'color-world',
+  ];
+  await db
+    .update(games)
+    .set({ isActive: false, updatedAt: new Date() })
+    .where(inArray(games.slug, inactivePlaceholderSlugs));
 
   // Add game subjects
   console.log('Seeding game subjects...');
@@ -865,6 +1014,12 @@ async function seedDatabase() {
     { id: 3, gameId: 3, subjectId: 3 }, // Science Lab - Science
     { id: 4, gameId: 4, subjectId: 7 }, // Typing Adventure - Typing
     { id: 5, gameId: 5, subjectId: 4 }, // Geography Explorer - Social Studies
+    // Batch 1 subject links (append only)
+    { id: 300, gameId: 300, subjectId: 1 }, // Number Ninja Slice - Math
+    { id: 301, gameId: 301, subjectId: 2 }, // Phonics Pet Parade - Reading
+    { id: 302, gameId: 302, subjectId: 1 }, // Fraction Pizza Party - Math
+    { id: 303, gameId: 303, subjectId: 2 }, // Word Builder Robot - Reading/English
+    { id: 304, gameId: 304, subjectId: 3 }, // Science Bubble Sort - Science
   ];
 
   await db.insert(gameSubjects).values(gameSubjectsData).onConflictDoNothing();

@@ -62,10 +62,11 @@ const GamesByGrade = ({ gradeId, gradeSlug }: GamesByGradeProps) => {
       const isAllActive = activeFilters.find(f => f.id === null)?.active || activeSubjectIds.length === 0;
       
       if (isAllActive) {
-        setFilteredGames(games);
+        setFilteredGames(games.filter(game => game.isActive !== false));
       } else {
         // Filter games by selected subjects
         setFilteredGames(games.filter(game => 
+          game.isActive !== false &&
           game.subjects?.some(subject => activeSubjectIds.includes(subject.id))
         ));
       }

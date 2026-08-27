@@ -38,7 +38,7 @@ const GamesBySubjectPage = () => {
     { id: 'general-knowledge', name: 'General Knowledge', icon: '🌍' }
   ];
 
-  // Filter games based on selected subject (active games only)
+  // Filter games based on selected subject (hide inactive / unbuilt games)
   useEffect(() => {
     const activeGames = games.filter(game => game.isActive !== false);
     if (activeSubject === 'all') {

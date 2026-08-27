@@ -81,7 +81,7 @@ const FeaturedGames = () => {
             ref={scrollContainerRef}
             className="flex overflow-x-auto space-x-6 py-4 no-scrollbar"
           >
-            {featuredGames.map((game) => (
+            {featuredGames.filter((game) => game.isActive !== false).map((game) => (
               <GameCard key={game.id} game={game} grades={grades} />
             ))}
           </div>
